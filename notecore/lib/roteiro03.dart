@@ -32,17 +32,21 @@ class HomePage extends StatelessWidget {
         body: Container(
           padding: EdgeInsets.all(16),
           color: Colors.amber,
-          child: Column(children: [
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             Row(
-              children: [_texto("test 1", 22)],
+              children: [
+                _texto("test 1", 22),
+                _texto("test 2", 22),
+                _texto("test 3", 22)
+              ],
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             ),
             Row(
-              children: [_texto("test 2", 22)],
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            ),
-            Row(
-              children: [_texto("test 3", 22)],
+              children: [
+                _texto("test 4", 22),
+                _texto("test 5", 22),
+                _texto("test 6", 22)
+              ],
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             ),
           ]),
