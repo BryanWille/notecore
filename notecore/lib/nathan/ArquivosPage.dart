@@ -5,19 +5,19 @@ class ArquivosPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Página de AArquivos'),
+        title: Text('Página de Arquivos'),
         centerTitle: true,
       ),
       body: Container(
-        color: Colors.redAccent,
+        color: Colors.green,
         child: Center(
-          child: ElevatedButton(
+          child:  ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-              elevation: 9,
+    style: ElevatedButton.styleFrom(
+    backgroundColor: Colors.red,
+    elevation: 9,
               padding: const EdgeInsets.all(8),
               textStyle: const TextStyle(
                 fontSize: 18,
@@ -30,15 +30,14 @@ class ArquivosPage extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
-                  Text('Voltar'),
-                  SizedBox(width: 15),
                   Icon(Icons.arrow_back_outlined),
+                  SizedBox(width: 15),
+                  Text('Voltar'),
                 ],
               ),
             ),
           ),
-        ),
-      ),
+        ),),
     );
   }
 }
