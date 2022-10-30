@@ -7,9 +7,9 @@ void roteiro01(){
       theme: ThemeData(
       primarySwatch: Colors.pink,
       ),
-      home: Scafold(
+      home: Scaffold(
         appBar: AppBar(
-          title: const text('Meu primeiro Arquivo'),
+          title: const Text('Meu primeiro Arquivo'),
         ),
         body: const Center(
           child: Text('Hello World Flutter!'),
