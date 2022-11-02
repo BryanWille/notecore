@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'roteiro-5-pages/home_page.dart';
+import 'roteiro-6-pages/home_page.dart';
+import 'roteiro-6-pages/anuncios_page.dart';
+import 'roteiro-6-pages/dados_page.dart';
+import 'roteiro-6-pages/favoritos_page.dart';
+import 'roteiro-6-pages/routes.dart';
 
 // *********************************
 //
@@ -19,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: const HomePage(),
+      routes: routes(),
     );
   }
 }

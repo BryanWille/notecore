@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:notecore/bryan/pages/anuncios_page.dart';
-import 'package:notecore/bryan/pages/dados_page.dart';
-import 'package:notecore/bryan/pages/favoritos_page.dart';
+import 'package:notecore/bryan/roteiro-5-pages/anuncios_page.dart';
+import 'package:notecore/bryan/roteiro-5-pages/dados_page.dart';
+import 'package:notecore/bryan/roteiro-5-pages/favoritos_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'roteiro-5-pages/home_page.dart';
+import 'roteiro-7-pages/home_page.dart';
 
 // *********************************
 //
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: const HomePage(),
+      home: HomePage(),
     );
   }
 }
