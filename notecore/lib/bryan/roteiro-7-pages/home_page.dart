@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/material.dart';
 import 'anuncios_page.dart';
 import 'dados_page.dart';
@@ -42,3 +43,4 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+*/
