@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "146519717733",
+    "project_id": "notecore-dhc",
+    "storage_bucket": "notecore-dhc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:146519717733:android:6adad1a0cfa0cf4eb9d38c",
+        "android_client_info": {
+          "package_name": "com.dhc.notecore"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "146519717733-a2231g4jf3o5bomj8806seil77092gav.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCULsPg5sMQ1oMxzsLhuNa-2yQdnch84xg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "146519717733-a2231g4jf3o5bomj8806seil77092gav.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
