@@ -29,6 +29,13 @@
             {
               "client_id": "146519717733-a2231g4jf3o5bomj8806seil77092gav.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "146519717733-0lnqd76930414nk3631kab32fkskntge.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dhc.notecore"
+              }
             }
           ]
         }

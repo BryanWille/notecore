@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notecore/telas/autenticacao/login.dart';
+import 'package:notecore/telas/autenticacao/registro.dart';
 
 class Autenticacao extends StatefulWidget {
   const Autenticacao({super.key});
@@ -9,10 +10,17 @@ class Autenticacao extends StatefulWidget {
 }
 
 class _AutenticacaoState extends State<Autenticacao> {
+  bool mostrarLogin = true;
+  void mudarEntrada() {
+    setState(() => mostrarLogin = !mostrarLogin);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: LogIn(),
-    );
+    if (mostrarLogin) {
+      return LogIn(mudarVisualizao: mudarEntrada);
+    } else {
+      return Registrar(mudarVisualizao: mudarEntrada);
+    }
   }
 }

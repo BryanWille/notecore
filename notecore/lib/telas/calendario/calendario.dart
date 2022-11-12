@@ -2,25 +2,37 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import 'package:flutter/material.dart';
+import 'package:notecore/servicos/auth.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import 'utils.dart';
 
-class TableBasicsExample extends StatefulWidget {
+class Calendario extends StatefulWidget {
   @override
-  _TableBasicsExampleState createState() => _TableBasicsExampleState();
+  ExemploCalendarioState createState() => ExemploCalendarioState();
 }
 
-class _TableBasicsExampleState extends State<TableBasicsExample> {
+class ExemploCalendarioState extends State<Calendario> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
+  final AuthServico _auth = AuthServico();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('TableCalendar - Basics'),
+        title: Text('Suas anotações'),
+        elevation: 0.0,
+        actions: <Widget>[
+          ElevatedButton.icon(
+            icon: Icon(Icons.person),
+            label: Text("Deslogar"),
+            onPressed: () async {
+              await _auth.deslogar();
+            },
+          )
+        ],
       ),
       body: TableCalendar(
         firstDay: kFirstDay,

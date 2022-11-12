@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:notecore/servicos/auth.dart';
 
-class LogIn extends StatefulWidget {
+class Registrar extends StatefulWidget {
   final Function mudarVisualizao;
-  LogIn({required this.mudarVisualizao});
+  Registrar({required this.mudarVisualizao});
+
+  //const Registrar({super.key});
 
   @override
-  State<LogIn> createState() => _LogInState();
+  State<Registrar> createState() => _RegistrarState();
 }
 
-class _LogInState extends State<LogIn> {
+class _RegistrarState extends State<Registrar> {
   final AuthServico _auth = AuthServico();
-
   String email = '';
   String password = '';
 
@@ -22,11 +24,11 @@ class _LogInState extends State<LogIn> {
         appBar: AppBar(
             backgroundColor: Colors.brown[400],
             elevation: 0.0,
-            title: Text("Entrar no Notecore"),
+            title: Text("Registrar no Notecore"),
             actions: <Widget>[
               ElevatedButton.icon(
                 icon: Icon(Icons.person),
-                label: Text("Registrar"),
+                label: Text("Logar"),
                 onPressed: () {
                   widget.mudarVisualizao();
                 },
@@ -52,13 +54,21 @@ class _LogInState extends State<LogIn> {
                   });
                 }),
               ),
+              TextFormField(
+                obscureText: true,
+                onChanged: ((val) {
+                  setState(() {
+                    password = val;
+                  });
+                }),
+              ),
               SizedBox(height: 20),
               ElevatedButton(
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.deepOrange),
                 ),
                 child: Text(
-                  "Logar",
+                  "Registrar",
                   style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () async {

@@ -1,4 +1,4 @@
-package com.example.notecore
+package com.dhc.notecore
 
 import io.flutter.embedding.android.FlutterActivity
 
