@@ -11,9 +11,11 @@ class LogIn extends StatefulWidget {
 
 class _LogInState extends State<LogIn> {
   final AuthServico _auth = AuthServico();
+  final _formKey = GlobalKey<FormState>();
 
   String email = '';
   String password = '';
+  String erro = '';
 
   @override
   Widget build(BuildContext context) {
@@ -35,38 +37,59 @@ class _LogInState extends State<LogIn> {
         body: Container(
           padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
           child: Form(
+              key: _formKey,
               child: Column(
-            children: <Widget>[
-              SizedBox(height: 20),
-              TextFormField(onChanged: ((val) {
-                setState(() {
-                  email = val;
-                });
-              })),
-              SizedBox(height: 20),
-              TextFormField(
-                obscureText: true,
-                onChanged: ((val) {
-                  setState(() {
-                    password = val;
-                  });
-                }),
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.deepOrange),
-                ),
-                child: Text(
-                  "Logar",
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () async {
-                  print(email + "\n" + password);
-                },
-              )
-            ],
-          )),
+                children: <Widget>[
+                  SizedBox(height: 20),
+                  TextFormField(
+                      validator: (val) =>
+                          val!.isEmpty ? "Insira o seu email" : null,
+                      onChanged: ((val) {
+                        setState(() {
+                          email = val;
+                        });
+                      })),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    obscureText: true,
+                    validator: (val) => val!.length < 8
+                        ? "Insira uma senha com mais de 8 dígitos"
+                        : null,
+                    onChanged: ((val) {
+                      setState(() {
+                        password = val;
+                      });
+                    }),
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.deepOrange),
+                    ),
+                    child: Text(
+                      "Logar",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        /*dynamic result =
+                            await _auth.registroComEmaileSenha(email, password);
+                        if (result == null) {
+                          setState(() {
+                            erro = "por favor entre com um email valido!";
+                          });
+                        }*/
+                        print("valido");
+                      }
+                    },
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(erro, style: TextStyle(color: Colors.red, fontSize: 14))
+                ],
+              )),
         ));
   }
 }

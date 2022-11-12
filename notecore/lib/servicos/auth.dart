@@ -4,7 +4,7 @@ import 'package:notecore/modelos/usuario.dart';
 class AuthServico {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // criar o usuário obj baseado no FireBaseUser
+  // criar o usuário baseado no FireBaseUser
   Usuario? _usuarioDoFirebaseUser(User? usuario) {
     return usuario != null ? Usuario(uid: usuario.uid) : null;
   }
@@ -29,6 +29,17 @@ class AuthServico {
   // login com email e senha
 
   // registro com email e senha
+  Future registroComEmaileSenha(String email, String password) async {
+    try {
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      User usuario = result.user!;
+      return _usuarioDoFirebaseUser(usuario);
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
 
   // deslogar
   Future deslogar() async {
