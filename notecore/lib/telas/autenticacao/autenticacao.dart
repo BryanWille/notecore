@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notecore/telas/autenticacao/login.dart';
 
 class Autenticacao extends StatefulWidget {
   const Autenticacao({super.key});
@@ -11,7 +12,7 @@ class _AutenticacaoState extends State<Autenticacao> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text("Autenticação"),
+      child: LogIn(),
     );
   }
 }
