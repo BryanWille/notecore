@@ -23,42 +23,64 @@ class _RegistrarState extends State<Registrar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.brown[100],
         appBar: AppBar(
-            backgroundColor: Colors.brown[400],
-            elevation: 0.0,
-            title: Text("Registrar no Notecore"),
-            actions: <Widget>[
-              ElevatedButton.icon(
-                icon: Icon(Icons.person),
-                label: Text("Logar"),
-                onPressed: () {
-                  widget.mudarVisualizao();
-                },
-              )
-            ]),
-        body: Container(
-          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
+          title: const Text('Cadastro'),
+          centerTitle: true,
+        ),
+        body: SingleChildScrollView(
           child: Form(
-              key: _formKey,
+            key: _formKey,
+            child: Container(
+              padding: EdgeInsets.all(16.0),
               child: Column(
                 children: <Widget>[
-                  SizedBox(height: 20),
+                  Container(
+                    child: new Image.asset(
+                      'cadastro.png',
+                      width: 150,
+                    ),
+                  ),
                   TextFormField(
-                      decoration: InputDecoration(
-                          labelText: "Nome",
-                          hintText: "Digite o seu nome",
-                          border: OutlineInputBorder(borderSide: BorderSide())),
-                      validator: (val) =>
-                          val!.isEmpty ? "Insira o seu nome" : null,
-                      onChanged: ((val) {
-                        setState(() {});
-                      })),
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.text,
+                    autofocus: true,
+                    decoration: InputDecoration(
+                      labelText: 'Nome',
+                      hintText: 'Digite seu nome',
+                      border: OutlineInputBorder(borderSide: BorderSide()),
+                    ),
+                    validator: (val) =>
+                        val!.isEmpty ? "Insira o seu nome" : null,
+                    onChanged: ((val) {
+                      setState(() {});
+                    }),
+                  ),
+                  SizedBox(height: 12),
                   TextFormField(
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.text,
+                    autofocus: true,
+                    decoration: InputDecoration(
+                      labelText: 'Login',
+                      hintText: 'Digite seu login',
+                      border: OutlineInputBorder(borderSide: BorderSide()),
+                    ),
+                    validator: (val) =>
+                        val!.isEmpty ? "Insira o seu usuário" : null,
+                    onChanged: ((val) {
+                      setState(() {});
+                    }),
+                  ),
+                  SizedBox(height: 12),
+                  TextFormField(
+                      textInputAction: TextInputAction.next,
+                      keyboardType: TextInputType.text,
+                      autofocus: true,
                       decoration: InputDecoration(
-                          labelText: "Email",
-                          hintText: "seuemail@email.com",
-                          border: OutlineInputBorder(borderSide: BorderSide())),
+                        labelText: 'E-mail',
+                        hintText: 'seuemail@email.com',
+                        border: OutlineInputBorder(borderSide: BorderSide()),
+                      ),
                       validator: (val) =>
                           val!.isEmpty ? "Insira seu email" : null,
                       onChanged: ((val) {
@@ -66,62 +88,91 @@ class _RegistrarState extends State<Registrar> {
                           email = val;
                         });
                       })),
-                  SizedBox(height: 20),
+                  SizedBox(height: 12),
                   TextFormField(
+                    textInputAction: TextInputAction.done,
+                    keyboardType: TextInputType.text,
+                    obscureText: true,
                     decoration: InputDecoration(
-                        labelText: "Senha",
-                        border: OutlineInputBorder(borderSide: BorderSide())),
+                      labelText: 'Senha',
+                      hintText: 'Digite sua senha',
+                      border: OutlineInputBorder(borderSide: BorderSide()),
+                    ),
                     validator: (val) => val!.length < 8
                         ? "Insira uma senha com mais de 8 dígitos"
                         : null,
-                    obscureText: true,
                     onChanged: ((val) {
                       setState(() {
                         password = val;
                       });
                     }),
                   ),
+                  SizedBox(height: 12),
                   TextFormField(
-                    decoration: InputDecoration(
-                        labelText: "Confirmar senha",
-                        border: OutlineInputBorder(borderSide: BorderSide())),
-                    validator: (val) =>
-                        val!.isEmpty ? "Insira a confirmação de senha" : null,
+                    textInputAction: TextInputAction.done,
+                    keyboardType: TextInputType.text,
                     obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: 'Confirmação de Senha',
+                      hintText: 'Confirme sua senha',
+                      border: OutlineInputBorder(borderSide: BorderSide()),
+                    ),
+                    validator: (val) => val!.length < 8
+                        ? "Insira uma senha com mais de 8 dígitos"
+                        : null,
                     onChanged: ((val) {
                       setState(() {
                         password = val;
                       });
                     }),
                   ),
-                  SizedBox(height: 20),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.deepOrange),
+                  SizedBox(height: 16),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 60,
+                    child: ElevatedButton(
+                        child: Text('Cadastrar'),
+                        style: ElevatedButton.styleFrom(
+                            primary: Colors.deepOrangeAccent,
+                            textStyle: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold)),
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            dynamic result = await _auth.registroComEmaileSenha(
+                                email, password);
+                            if (result == null) {
+                              setState(() {
+                                erro = "por favor entre com um email valido!";
+                              });
+                            }
+                          }
+                        }),
+                  ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 60,
+                    child: ElevatedButton(
+                      child: Text('Fazer login'),
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.deepOrangeAccent,
+                          textStyle: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold)),
+                      onPressed: () {
+                        widget.mudarVisualizao();
+                      },
                     ),
-                    child: Text(
-                      "Registrar",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        dynamic result =
-                            await _auth.registroComEmaileSenha(email, password);
-                        if (result == null) {
-                          setState(() {
-                            erro = "por favor entre com um email valido!";
-                          });
-                        }
-                      }
-                    },
                   ),
                   SizedBox(
                     height: 20,
                   ),
                   Text(erro, style: TextStyle(color: Colors.red, fontSize: 14))
                 ],
-              )),
+              ),
+            ),
+          ),
         ));
   }
 }

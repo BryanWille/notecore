@@ -20,57 +20,68 @@ class _LogInState extends State<LogIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.brown[100],
-        appBar: AppBar(
-            backgroundColor: Colors.brown[400],
-            elevation: 0.0,
-            title: Text("Entrar no Notecore"),
-            actions: <Widget>[
-              ElevatedButton.icon(
-                icon: Icon(Icons.person),
-                label: Text("Registrar"),
-                onPressed: () {
-                  widget.mudarVisualizao();
-                },
-              )
-            ]),
-        body: Container(
-          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
-          child: Form(
-              key: _formKey,
-              child: Column(
-                children: <Widget>[
-                  SizedBox(height: 20),
-                  TextFormField(
-                      validator: (val) =>
-                          val!.isEmpty ? "Insira o seu email" : null,
-                      onChanged: ((val) {
-                        setState(() {
-                          email = val;
-                        });
-                      })),
-                  SizedBox(height: 20),
-                  TextFormField(
-                    obscureText: true,
-                    validator: (val) => val!.length < 8
-                        ? "Insira uma senha com mais de 8 dígitos"
-                        : null,
-                    onChanged: ((val) {
-                      setState(() {
-                        password = val;
-                      });
-                    }),
+      appBar: AppBar(
+        title: const Text('Entrar no Notecore'),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        child: Form(
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                Container(
+                  child: Image.asset(
+                    "lib/assets/images/cadastro.png",
+                    height: 185,
                   ),
-                  SizedBox(height: 20),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.deepOrange),
-                    ),
-                    child: Text(
-                      "Logar",
-                      style: TextStyle(color: Colors.white),
-                    ),
+                ),
+                TextFormField(
+                  textInputAction: TextInputAction.next,
+                  keyboardType: TextInputType.text,
+                  autofocus: true,
+                  validator: (val) =>
+                      val!.isEmpty ? "Insira o seu email" : null,
+                  onChanged: ((val) {
+                    setState(() {
+                      email = val;
+                    });
+                  }),
+                  decoration: InputDecoration(
+                    labelText: 'Login',
+                    hintText: 'Digite seu login',
+                    border: OutlineInputBorder(borderSide: BorderSide()),
+                  ),
+                ),
+                SizedBox(height: 10),
+                TextFormField(
+                  textInputAction: TextInputAction.done,
+                  keyboardType: TextInputType.text,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: 'Senha',
+                    hintText: 'Digite sua senha',
+                    border: OutlineInputBorder(borderSide: BorderSide()),
+                  ),
+                  validator: (val) => val!.length < 8
+                      ? "Insira uma senha com mais de 8 dígitos"
+                      : null,
+                  onChanged: ((val) {
+                    setState(() {
+                      password = val;
+                    });
+                  }),
+                ),
+                SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  height: 60,
+                  child: ElevatedButton(
+                    child: Text('Entrar'),
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.deepOrangeAccent,
+                        textStyle: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold)),
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         /*dynamic result =
@@ -84,12 +95,29 @@ class _LogInState extends State<LogIn> {
                       }
                     },
                   ),
-                  SizedBox(
-                    height: 20,
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  height: 60,
+                  child: ElevatedButton(
+                    child: Text('Criar conta'),
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.deepOrangeAccent,
+                        textStyle: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold)),
+                    onPressed: () {
+                      widget.mudarVisualizao();
+                    }, 
                   ),
-                  Text(erro, style: TextStyle(color: Colors.red, fontSize: 14))
-                ],
-              )),
-        ));
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
