@@ -26,6 +26,7 @@ class _LogInState extends State<LogIn> {
       ),
       body: SingleChildScrollView(
         child: Form(
+          key: _formKey,
           child: Container(
             padding: EdgeInsets.all(16.0),
             child: Column(
@@ -73,6 +74,7 @@ class _LogInState extends State<LogIn> {
                   }),
                 ),
                 SizedBox(height: 12),
+                Text(erro, style: TextStyle(color: Colors.red, fontSize: 14)),
                 SizedBox(
                   width: double.infinity,
                   height: 60,
@@ -84,14 +86,13 @@ class _LogInState extends State<LogIn> {
                             fontSize: 20, fontWeight: FontWeight.bold)),
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        /*dynamic result =
-                            await _auth.registroComEmaileSenha(email, password);
+                        dynamic result =
+                            await _auth.loginComEmailESenha(email, password);
                         if (result == null) {
                           setState(() {
-                            erro = "por favor entre com um email valido!";
+                            erro = "Email ou senha não digitados corretamente!";
                           });
-                        }*/
-                        print("valido");
+                        }
                       }
                     },
                   ),
@@ -110,7 +111,7 @@ class _LogInState extends State<LogIn> {
                             fontSize: 20, fontWeight: FontWeight.bold)),
                     onPressed: () {
                       widget.mudarVisualizao();
-                    }, 
+                    },
                   ),
                 ),
               ],

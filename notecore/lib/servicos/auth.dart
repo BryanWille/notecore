@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:notecore/modelos/usuario.dart';
+import 'package:notecore/servicos/bancodedados.dart';
 
 class AuthServico {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -27,6 +28,17 @@ class AuthServico {
   }
 
   // login com email e senha
+  Future loginComEmailESenha(String email, String password) async {
+    try {
+      UserCredential result = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      User usuario = result.user!;
+      return _usuarioDoFirebaseUser(usuario);
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
 
   // registro com email e senha
   Future registroComEmaileSenha(String email, String password) async {
@@ -34,6 +46,10 @@ class AuthServico {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       User usuario = result.user!;
+      await ServicoBancoDados(uid: usuario.uid).atualizarDadosUsuarios(
+          "Primeira anotação",
+          "Essa é minha primeira anotação!",
+          DateTime.now());
       return _usuarioDoFirebaseUser(usuario);
     } catch (e) {
       print(e.toString());
