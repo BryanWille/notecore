@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:notecore/modelos/usuario.dart';
 import 'package:notecore/servicos/bancodedados.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthServico {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   // criar o usuário baseado no FireBaseUser
   Usuario? _usuarioDoFirebaseUser(User? usuario) {
@@ -20,7 +22,11 @@ class AuthServico {
     try {
       UserCredential result = await _auth.signInAnonymously();
       User? user = result.user;
-      return _usuarioDoFirebaseUser(user!);
+      await _db
+          .doc("caminho")
+          .collection("teste")
+          .add({"teste": DateTime.now()});
+      return _usuarioDoFirebaseUser(user);
     } catch (e) {
       print(e.toString());
       return null;
@@ -46,10 +52,6 @@ class AuthServico {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       User usuario = result.user!;
-      await ServicoBancoDados(uid: usuario.uid).atualizarDadosUsuarios(
-          "Primeira anotação",
-          "Essa é minha primeira anotação!",
-          DateTime.now());
       return _usuarioDoFirebaseUser(usuario);
     } catch (e) {
       print(e.toString());

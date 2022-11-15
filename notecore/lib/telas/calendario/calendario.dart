@@ -4,7 +4,10 @@
 import 'package:flutter/material.dart';
 import 'package:notecore/servicos/auth.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:notecore/servicos/bancodedados.dart';
+import 'package:notecore/modelos/anotacao.dart';
 
+import '../anotacoes/adicionaNotas.dart';
 import 'utils.dart';
 
 class Calendario extends StatefulWidget {
@@ -17,6 +20,7 @@ class ExemploCalendarioState extends State<Calendario> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   final AuthServico _auth = AuthServico();
+  final ProdutoDao _db = ProdutoDao();
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +33,8 @@ class ExemploCalendarioState extends State<Calendario> {
             icon: Icon(Icons.person),
             label: Text("Deslogar"),
             onPressed: () async {
-              await _auth.deslogar();
+              _showDialog();
+              //await _auth.deslogar();
             },
           )
         ],
@@ -69,6 +74,46 @@ class ExemploCalendarioState extends State<Calendario> {
           _focusedDay = focusedDay;
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (contex) => AdicionaNota(),
+            ),
+          );
+        },
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+        backgroundColor: Colors.grey[700],
+      ),
+    );
+  }
+
+  Future retornaTituloPrimeiraAnotacao() async {
+    return await _db.getProdutos().toString();
+  }
+
+  void _showDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // retorna um objeto do tipo Dialog
+        return AlertDialog(
+          title: new Text(retornaTituloPrimeiraAnotacao().toString()),
+          content: new Text(retornaTituloPrimeiraAnotacao().toString()),
+          actions: <Widget>[
+            // define os botões na base do dialogo
+            new TextButton(
+              child: new Text("Fechar"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

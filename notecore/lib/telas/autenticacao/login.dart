@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:notecore/servicos/auth.dart';
 
@@ -16,6 +18,7 @@ class _LogInState extends State<LogIn> {
   String email = '';
   String password = '';
   String erro = '';
+  bool _mostrarSenha = false;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +35,7 @@ class _LogInState extends State<LogIn> {
             child: Column(
               children: [
                 Container(
-                  child: Image.asset(
+                  child: new Image.asset(
                     "lib/assets/images/cadastro.png",
                     height: 185,
                   ),
@@ -58,14 +61,27 @@ class _LogInState extends State<LogIn> {
                 TextFormField(
                   textInputAction: TextInputAction.done,
                   keyboardType: TextInputType.text,
-                  obscureText: true,
+                  obscureText: _mostrarSenha == false ? true : false,
                   decoration: InputDecoration(
+                    suffixIcon: GestureDetector(
+                      child: Icon(
+                        _mostrarSenha == false
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                        color: Color.fromARGB(255, 35, 55, 168),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _mostrarSenha = !_mostrarSenha;
+                        });
+                      },
+                    ),
                     labelText: 'Senha',
                     hintText: 'Digite sua senha',
                     border: OutlineInputBorder(borderSide: BorderSide()),
                   ),
-                  validator: (val) => val!.length < 8
-                      ? "Insira uma senha com mais de 8 dígitos"
+                  validator: (val) => val!.length < 6
+                      ? "Insira uma senha com mais de 6 dígitos"
                       : null,
                   onChanged: ((val) {
                     setState(() {
@@ -111,6 +127,23 @@ class _LogInState extends State<LogIn> {
                             fontSize: 20, fontWeight: FontWeight.bold)),
                     onPressed: () {
                       widget.mudarVisualizao();
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  height: 60,
+                  child: ElevatedButton(
+                    child: Text('Login Anônimo'),
+                    style: ElevatedButton.styleFrom(
+                        primary: Color.fromARGB(255, 1, 22, 33),
+                        textStyle: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold)),
+                    onPressed: () {
+                      _auth.logarAnonimo();
                     },
                   ),
                 ),
