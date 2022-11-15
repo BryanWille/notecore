@@ -8,13 +8,29 @@ import 'package:notecore/modelos/anotacao.dart';
 class DataUploader extends GetxController {
   @override
   void onReady() {
-    uploadData();
+    //uploadData();
     super.onReady();
   }
 
   Future<void> uploadData() async {
-    final fireStore = FirebaseFirestore.instance;
-    final pathFS = fireStore.collection("anotacoes");
+    final _firestore = FirebaseFirestore.instance;
+    final user = <String, dynamic>{
+      "first": "Brtya",
+      "middle": "Mathsadasdasdasison",
+      "last": "Turingsadasdasd",
+      "born": 19230
+    };
+    final CollectionReference _Collection = _firestore.collection('teste');
+    DocumentReference documentReferencer = _Collection.doc();
+
+    // Add a new document with a generated ID
+    try {
+      await documentReferencer.set(user);
+    } catch (e) {
+      print(e);
+    }
+
+    /*
     try {
       Anotacao anotacao = Anotacao(213, "2j2i0123sads2", "Esse é o titulo",
           "12312312oiwoda descriasado0", DateTime.now());
@@ -58,6 +74,6 @@ class DataUploader extends GetxController {
         "data": anotacao.horaCriacao,
       });
     }
-    */
+    */*/
   }
 }
