@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:notecore/modelos/anotacao.dart';
 import 'package:notecore/servicos/bancodedados.dart';
+import 'package:notecore/telas/calendario/calendario.dart';
 
 class AdicionaNota extends StatefulWidget {
   @override
@@ -12,13 +13,11 @@ class AdicionaNota extends StatefulWidget {
 }
 
 class _AdicionaNotaState extends State<AdicionaNota> {
-  int id = Random().nextInt(1000000000);
   late String titulo;
   late String descricao;
-  late String userId;
-  late DateTime horaCriacao;
-
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  late Timestamp horaCriacao;
+  final ServicoBD _bd = ServicoBD();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +57,11 @@ class _AdicionaNotaState extends State<AdicionaNota> {
                     ElevatedButton(
                       onPressed: () {
                         add();
-                        Navigator.of(context).pop();
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (contex) => Calendario(),
+                          ),
+                        );
                       },
                       child: Text(
                         "Save",
@@ -136,11 +139,9 @@ class _AdicionaNotaState extends State<AdicionaNota> {
 
   void add() async {
     // save to db
-
-    String uid = _auth.currentUser!.uid;
-    horaCriacao = DateTime.now();
-    Anotacao nota = Anotacao(id, uid, titulo, descricao, horaCriacao);
-
+    horaCriacao = Timestamp.now();
+    Anotacao nota = Anotacao(titulo, descricao, horaCriacao);
+    _bd.criarNota(nota);
     //AlteracoesDb db = AlteracoesDb();
     //await db.insertAnotacao(nota);
   }

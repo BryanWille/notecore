@@ -36,7 +36,7 @@ class _LogInState extends State<LogIn> {
               children: [
                 Container(
                   child: new Image.asset(
-                    "lib/assets/images/cadastro.png",
+                    "lib/assets/images/cadastro.jpg",
                     height: 185,
                   ),
                 ),

@@ -1,16 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Anotacao {
-  int? id;
-  String? userId;
   String? titulo;
   String? descricao;
-  DateTime? horaCriacao;
+  Timestamp? horaCriacao;
 
-  Anotacao(this.id, this.userId, this.titulo, this.descricao, this.horaCriacao);
+  Anotacao(this.titulo, this.descricao, this.horaCriacao);
 
   Map<String, dynamic> paraDicionario() {
     var map = <String, dynamic>{
-      'id': id,
-      'userId': userId,
       'titulo': titulo,
       'descricao': descricao,
       'horaCriacao': horaCriacao,
@@ -19,16 +17,32 @@ class Anotacao {
   }
 
   Anotacao.deDicionario(Map<String, dynamic> map) {
-    id = map['id'];
-    userId = map['userId'];
     titulo = map['titulo'];
     descricao = map['descricao'];
     horaCriacao = map['horaCriacao'];
   }
 
-  Anotacao.deJSON(Map<String, dynamic> map) {
-    id = map['id'];
-    userId = map['userId'];
+  factory Anotacao.fromFirestore(
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    SnapshotOptions? options,
+  ) {
+    final data = snapshot.data();
+    return Anotacao(
+      data?['titulo'],
+      data?['descricao'],
+      data?['horaCriacao'],
+    );
+  }
+
+  Map<String, dynamic> toFirestore() {
+    return {
+      if (titulo != null) "titulo": titulo,
+      if (descricao != null) "descricao": descricao,
+      if (horaCriacao != null) "horaCriacao": horaCriacao,
+    };
+  }
+
+  Anotacao.fromJson(Map<String, dynamic> map) {
     titulo = map['titulo'];
     descricao = map['descricao'];
     horaCriacao = map['horaCriacao'];
@@ -36,6 +50,6 @@ class Anotacao {
 
   @override
   String toString() {
-    return "Produto => (id: $id, userId: $userId, titulo: $titulo, descricao: $descricao, data: $horaCriacao)";
+    return "Anoptações => (titulo: $titulo, descricao: $descricao, data: $horaCriacao)";
   }
 }

@@ -1,79 +1,34 @@
 import 'dart:convert';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-import 'package:notecore/modelos/anotacao.dart';
 
-class DataUploader extends GetxController {
-  @override
-  void onReady() {
-    //uploadData();
-    super.onReady();
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:notecore/modelos/anotacao.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+class ServicoBD {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  late CollectionReference _anotacoesUsuario =
+      _firestore.collection("usuarios/${_auth.currentUser!.uid}/anotacoes");
+
+  void criarNota(Anotacao anotacao) async {
+    var map = anotacao.paraDicionario();
+    await _anotacoesUsuario.doc().set(map);
   }
 
-  Future<void> uploadData() async {
-    final _firestore = FirebaseFirestore.instance;
-    final user = <String, dynamic>{
-      "first": "Brtya",
-      "middle": "Mathsadasdasdasison",
-      "last": "Turingsadasdasd",
-      "born": 19230
-    };
-    final CollectionReference _Collection = _firestore.collection('teste');
-    DocumentReference documentReferencer = _Collection.doc();
-
-    // Add a new document with a generated ID
-    try {
-      await documentReferencer.set(user);
-    } catch (e) {
-      print(e);
-    }
-
-    /*
-    try {
-      Anotacao anotacao = Anotacao(213, "2j2i0123sads2", "Esse é o titulo",
-          "12312312oiwoda descriasado0", DateTime.now());
-      var batch = fireStore.batch();
-      batch.set(pathFS.doc(anotacao.id.toString()), {
-        "userId": anotacao.userId,
-        "titulo": anotacao.titulo,
-        "descricao": anotacao.descricao,
-        "data": anotacao.horaCriacao,
-      });
-      await batch.commit();
-    } catch (e) {
-      print(e);
-    }
-    print("Aqui em baixo");
-
-    /*
-    final manifestContent = await DefaultAssetBundle.of(Get.context!)
-        .loadString("AssetManifest.json");
-    final Map<String, dynamic> manifestMap = json.decode(manifestContent);
-    final anotacoesEmAssets = manifestMap.keys
-        .where((path) =>
-            path.startsWith("assets/DB/anotacao") && path.contains(".json"))
-        .toList();
-    List<Anotacao> anotacoes = [];
-    for (var anotacao in anotacoesEmAssets) {
-      String conteudoAnotacao = await rootBundle.loadString(anotacao);
-      print(conteudoAnotacao);
-      anotacoes.add(Anotacao.deJSON(json.decode(conteudoAnotacao)));
-    }
-
-    print(anotacoes.toString());
-    
-    
-
-    for (var anotacao in anotacoes) {
-      batch.set(pathFS.doc(anotacao.id.toString()), {
-        "userId": anotacao.userId,
-        "titulo": anotacao.titulo,
-        "descricao": anotacao.descricao,
-        "data": anotacao.horaCriacao,
+  Future<List<Map<String, dynamic>>> retornaNotas() async {
+    QuerySnapshot<Object?> snapshot = await _anotacoesUsuario.get();
+    final todosIds = snapshot.docs.map((doc) => doc.id).toList();
+    List<Map<String, dynamic>> anotacoes = List.empty(growable: true);
+    for (var idAnotacao in todosIds) {
+      await _anotacoesUsuario
+          .doc(idAnotacao)
+          .get()
+          .then((DocumentSnapshot doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        anotacoes.add(data);
       });
     }
-    */*/
+    return anotacoes;
   }
 }

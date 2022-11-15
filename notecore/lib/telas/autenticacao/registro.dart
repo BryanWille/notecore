@@ -26,14 +26,17 @@ class _RegistrarState extends State<Registrar> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: GestureDetector(
-          onTap: () {
+          leading: BackButton(
+            onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => LogIn(mudarVisualizao: widget.mudarVisualizao,)),
+                MaterialPageRoute(
+                    builder: (context) => LogIn(
+                          mudarVisualizao: widget.mudarVisualizao,
+                        )),
               );
-            } ,
-        ) ,
+            },
+          ),
           title: const Text('Cadastro'),
           centerTitle: true,
         ),
@@ -46,7 +49,7 @@ class _RegistrarState extends State<Registrar> {
                 children: <Widget>[
                   Container(
                     child: new Image.asset(
-                      'lib/assets/images/cadastro.png',
+                      'lib/assets/images/cadastro.jpg',
                       height: 185,
                     ),
                   ),

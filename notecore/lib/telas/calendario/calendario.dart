@@ -1,78 +1,123 @@
-// Copyright 2019 Aleksander Woźniak
-// SPDX-License-Identifier: Apache-2.0
-
-import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:cell_calendar/cell_calendar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:notecore/servicos/auth.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:notecore/servicos/bancodedados.dart';
-import 'package:notecore/modelos/anotacao.dart';
+import 'package:notecore/telas/calendario/calendario.dart';
+import 'package:flutter/material.dart';
+import 'package:notecore/telas/anotacoes/adicionaNotas.dart';
+import '../Sidebar/drawer.dart';
 
-import '../anotacoes/adicionaNotas.dart';
-import 'utils.dart';
-
-class Calendario extends StatefulWidget {
-  @override
-  ExemploCalendarioState createState() => ExemploCalendarioState();
-}
-
-class ExemploCalendarioState extends State<Calendario> {
-  CalendarFormat _calendarFormat = CalendarFormat.month;
-  DateTime _focusedDay = DateTime.now();
-  DateTime? _selectedDay;
-  final DataUploader mandarDados = DataUploader();
-  final AuthServico _auth = AuthServico();
+class Calendario extends StatelessWidget {
+  Calendario({Key? key}) : super(key: key);
+  AuthServico _auth = AuthServico();
+  ServicoBD _bd = ServicoBD();
 
   @override
   Widget build(BuildContext context) {
+    final _sampleEvents = sampleEvents();
+    final cellCalendarPageController = CellCalendarPageController();
     return Scaffold(
       appBar: AppBar(
-        title: Text('Suas anotações'),
-        elevation: 0.0,
+        title: Text("Suas anotações"),
         actions: <Widget>[
           ElevatedButton.icon(
             icon: Icon(Icons.person),
             label: Text("Deslogar"),
-            onPressed: () async {
-              mandarDados.uploadData();
+            onPressed: () {
+              _bd.retornaNotas();
               //await _auth.deslogar();
             },
           )
         ],
       ),
-      body: TableCalendar(
-        firstDay: kFirstDay,
-        lastDay: kLastDay,
-        focusedDay: _focusedDay,
-        calendarFormat: _calendarFormat,
-        selectedDayPredicate: (day) {
-          // Use `selectedDayPredicate` to determine which day is currently selected.
-          // If this returns true, then `day` will be marked as selected.
-
-          // Using `isSameDay` is recommended to disregard
-          // the time-part of compared DateTime objects.
-          return isSameDay(_selectedDay, day);
-        },
-        onDaySelected: (selectedDay, focusedDay) {
-          if (!isSameDay(_selectedDay, selectedDay)) {
-            // Call `setState()` when updating the selected day
-            setState(() {
-              _selectedDay = selectedDay;
-              _focusedDay = focusedDay;
-            });
-          }
-        },
-        onFormatChanged: (format) {
-          if (_calendarFormat != format) {
-            // Call `setState()` when updating calendar format
-            setState(() {
-              _calendarFormat = format;
-            });
-          }
-        },
-        onPageChanged: (focusedDay) {
-          // No need to call `setState()` here
-          _focusedDay = focusedDay;
-        },
+      drawer: SafeArea(
+        child: MenuDrawer(),
+      ),
+      body: Container(
+        child: CellCalendar(
+          cellCalendarPageController: cellCalendarPageController,
+          events: _sampleEvents,
+          daysOfTheWeekBuilder: (dayIndex) {
+            final labels = ["S", "M", "T", "W", "T", "F", "S"];
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 4.0),
+              child: Text(
+                labels[dayIndex],
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            );
+          },
+          monthYearLabelBuilder: (datetime) {
+            final year = datetime!.year.toString();
+            final month = datetime.month.monthName;
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Row(
+                children: [
+                  const SizedBox(width: 16),
+                  Text(
+                    "$month  $year",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    icon: Icon(Icons.calendar_today),
+                    onPressed: () {
+                      cellCalendarPageController.animateToDate(
+                        DateTime.now(),
+                        curve: Curves.linear,
+                        duration: Duration(milliseconds: 300),
+                      );
+                    },
+                  )
+                ],
+              ),
+            );
+          },
+          onCellTapped: (date) {
+            final eventsOnTheDate = _sampleEvents.where((event) {
+              final eventDate = event.eventDate;
+              return eventDate.year == date.year &&
+                  eventDate.month == date.month &&
+                  eventDate.day == date.day;
+            }).toList();
+            showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                      title: Text(
+                          date.month.monthName + " " + date.day.toString()),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: eventsOnTheDate
+                            .map(
+                              (event) => Container(
+                                width: double.infinity,
+                                padding: EdgeInsets.all(4),
+                                margin: EdgeInsets.only(bottom: 12),
+                                color: event.eventBackgroundColor,
+                                child: Text(
+                                  event.eventName,
+                                  style: TextStyle(color: event.eventTextColor),
+                                ),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ));
+          },
+          onPageChanged: (firstDate, lastDate) {
+            /// Called when the page was changed
+            /// Fetch additional events by using the range between [firstDate] and [lastDate] if you want
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -89,5 +134,27 @@ class ExemploCalendarioState extends State<Calendario> {
         backgroundColor: Colors.grey[700],
       ),
     );
+  }
+
+  List<CalendarEvent> sampleEvents() {
+    final today = DateTime.now();
+    final eventTextStyle = TextStyle(
+      fontSize: 9,
+      color: Colors.white,
+    );
+
+    var notas = _bd.retornaNotas();
+    List<Map<String, dynamic>> payload = new List.empty(growable: true);
+    notas.then((value) => payload = value);
+    print(payload);
+
+    final sampleEvents = [
+      CalendarEvent(
+        eventName: "payload[0]['titulo']",
+        eventDate: today.add(Duration(days: 5)),
+        eventBackgroundColor: Colors.indigoAccent,
+      ),
+    ];
+    return sampleEvents;
   }
 }
