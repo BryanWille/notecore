@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:notecore/modelos/anotacao.dart';
-import 'package:notecore/modelos/produtos.dart';
 import 'package:notecore/servicos/bancodedados.dart';
 
 class AdicionaNota extends StatefulWidget {
@@ -18,7 +17,6 @@ class _AdicionaNotaState extends State<AdicionaNota> {
   late String descricao;
   late String userId;
   late DateTime horaCriacao;
-  ProdutoDao _db = ProdutoDao();
 
   FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -141,10 +139,8 @@ class _AdicionaNotaState extends State<AdicionaNota> {
 
     String uid = _auth.currentUser!.uid;
     horaCriacao = DateTime.now();
-    Produto produto = Produto(id, titulo, 23, 23);
-    //Anotacao nota = Anotacao(id, uid, titulo, descricao, horaCriacao);
-    _db.initializeDatabase();
-    await _db.insertProduto(produto);
+    Anotacao nota = Anotacao(id, uid, titulo, descricao, horaCriacao);
+
     //AlteracoesDb db = AlteracoesDb();
     //await db.insertAnotacao(nota);
   }

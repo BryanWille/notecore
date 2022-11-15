@@ -19,8 +19,8 @@ class ExemploCalendarioState extends State<Calendario> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
+  final DataUploader mandarDados = DataUploader();
   final AuthServico _auth = AuthServico();
-  final ProdutoDao _db = ProdutoDao();
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class ExemploCalendarioState extends State<Calendario> {
             icon: Icon(Icons.person),
             label: Text("Deslogar"),
             onPressed: () async {
-              _showDialog();
+              mandarDados.uploadData();
               //await _auth.deslogar();
             },
           )
@@ -88,32 +88,6 @@ class ExemploCalendarioState extends State<Calendario> {
         ),
         backgroundColor: Colors.grey[700],
       ),
-    );
-  }
-
-  Future retornaTituloPrimeiraAnotacao() async {
-    return await _db.getProdutos().toString();
-  }
-
-  void _showDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // retorna um objeto do tipo Dialog
-        return AlertDialog(
-          title: new Text(retornaTituloPrimeiraAnotacao().toString()),
-          content: new Text(retornaTituloPrimeiraAnotacao().toString()),
-          actions: <Widget>[
-            // define os botões na base do dialogo
-            new TextButton(
-              child: new Text("Fechar"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 }
