@@ -74,8 +74,8 @@ Ao clicar no (!INSERIR AQUI O QUE O USUÁRIO IRÁ CLICAR), será exibido para o 
 
 Ao clicar no botão de "Logout", localizado no canto superior direito da tela, o usuário será deslogado da aplicação.
 
-># 🖥 Desenvolvedores
+>## 🖥 Desenvolvedores
 
-## [👨🏻‍💻 Bryan Wille](https://github.com/BryanWille)
-## [👨🏾‍💻 Cauã Henrique](https://github.com/CauaHvS)
-## [👨🏽‍💻 Nathan Marques](https://github.com/NathanMarques2001)
+### [👨🏻‍💻 Bryan Wille](https://github.com/BryanWille)
+### [👨🏾‍💻 Cauã Henrique](https://github.com/CauaHvS)
+### [👨🏽‍💻 Nathan Marques](https://github.com/NathanMarques2001)
