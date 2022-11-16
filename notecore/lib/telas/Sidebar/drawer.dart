@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../servicos/auth.dart';
-import '../../logout.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MenuDrawer extends StatelessWidget {
-  
-  const MenuDrawer({Key? key}) : super(key: key);
+  MenuDrawer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
