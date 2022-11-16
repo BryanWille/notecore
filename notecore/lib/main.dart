@@ -5,7 +5,6 @@ import 'package:notecore/telas/wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
-import './rotas.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
