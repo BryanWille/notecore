@@ -5,23 +5,115 @@ import 'package:notecore/servicos/bancodedados.dart';
 import 'package:flutter/material.dart';
 import 'package:notecore/telas/anotacoes/adicionaNotas.dart';
 import 'package:notecore/telas/calendario/anotacoes_calendario.dart';
-import '../Sidebar/drawer.dart';
+import '../sidebar/drawer.dart';
 import 'package:provider/provider.dart';
 
-class Calendario extends StatelessWidget {
-  Calendario({Key? key}) : super(key: key);
+class Calendario extends StatefulWidget {
+  const Calendario({Key? key}) : super(key: key);
+
+  @override
+  State<Calendario> createState() => CalendarioState();
+}
+
+class CalendarioState extends State<Calendario> {
   AuthServico _auth = AuthServico();
   ServicoBD _bd = ServicoBD();
+  List<Map<String, dynamic>>_listaProdutos = [];
+
+  @override
+  void initState() {
+    super.initState();
+    atualizarListaProdutos();
+  }
 
   @override
   Widget build(BuildContext context) {
     final _sampleEvents = sampleEvents();
     final cellCalendarPageController = CellCalendarPageController();
+    return Scaffold(
+      appBar: AppBar(title: const Text('CRUD Produtos'), centerTitle: true),
+      body: ListView.builder(
+        itemCount: _listaProdutos.length,
+        itemBuilder: (context, index) {
+          print(_listaProdutos);
+          return Dismissible(
+            key: Key(DateTime.now().microsecondsSinceEpoch.toString()),
+            direction: DismissDirection.startToEnd,
+            background: Container(
+              color: Colors.red,
+              child: const Align(
+                alignment: Alignment(-0.9, 0),
+                child: Icon(
+                  Icons.delete,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            onDismissed: (direcao) {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (inContext) {
+                  return WillPopScope(
+                    onWillPop: () async => false,
+                    child: AlertDialog(
+                      title: Text('Deseja mesmo excluir o produto?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(inContext);
+                            atualizarListaProdutos();
+                          },
+                          child: Text('Não'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            atualizarListaProdutos();
+                          },
+                          child: Text(_listaProdutos[0]['titulo']),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
+            },
+            child: ListTile(
+              leading: const Icon(
+                Icons.check_circle_rounded,
+                color: Colors.green,
+                size: 25,
+              ),
+              title: Text(_listaProdutos[index]['titulo']),
+              subtitle: Text(
+              _listaProdutos[index]['descricao']),
+              trailing: const Icon(Icons.arrow_forward),
+              onTap: () {
+              },
+            ),
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (contex) => AdicionaNota(),
+            ),
+          );
+        },
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+
+
+    // Calendario
     /*return StreamProvider<QuerySnapshot?>.value(
       value: ServicoBD().anotacoes,
       initialData: null,
       child:
-      */
     return Scaffold(
       appBar: AppBar(
         title: Text("Suas anotações"),
@@ -138,8 +230,19 @@ class Calendario extends StatelessWidget {
         ),
         backgroundColor: Colors.grey[700],
       ),
-    );
+    ); 
+  }*/
+  
+
+  void atualizarListaProdutos() {
+    _bd.retornaNotas().then((lista) {
+      setState(() {
+        _listaProdutos = lista;
+      });
+    });
   }
+
+
 
   List<CalendarEvent> sampleEvents() {
     final today = DateTime.now();
