@@ -19,8 +19,6 @@ class CalendarioState extends State<Calendario> {
   AuthServico _auth = AuthServico();
   ServicoBD _bd = ServicoBD();
   List<Map<String, dynamic>>_listaProdutos = [];
-  List<CalendarEvent> eventos = [];
-
 
   @override
   void initState() {
@@ -30,28 +28,31 @@ class CalendarioState extends State<Calendario> {
 
   @override
   Widget build(BuildContext context) {
+    final _sampleEvents = sampleEvents();
     final cellCalendarPageController = CellCalendarPageController();
     return Scaffold(
-      appBar: AppBar(title: const Text('Notecore: Suas anotações')),
-      body: Stack(
-      children: <Widget>[
-        ListView?.builder(
-        itemCount: _listaProdutos.length,
-        itemBuilder: (context, index) {
-          final evento = CalendarEvent(
-                eventName: _listaProdutos[index]['titulo'],
-                eventDate:  DateTime.now().add(Duration(days: 2)),
-                eventBackgroundColor: Colors.indigoAccent,
-          );
-          eventos.add(evento);
-          return  Container();}),
-        CellCalendar(
+      appBar: AppBar(
+        title: Text("Suas anotações"),
+        actions: <Widget>[
+          ElevatedButton.icon(
+            icon: Icon(Icons.person),
+            label: Text("Deslogar"),
+            onPressed: () {
+              print("botão de debug");
+            },
+          )
+        ],
+      ),
+      drawer: SafeArea(
+        child: MenuDrawer(),
+      ),
+      //body: AnotacoesLista(),
+      body: Container(
+        child: CellCalendar(
           cellCalendarPageController: cellCalendarPageController,
-          
-          events: eventos,
-
+          events: _sampleEvents,
           daysOfTheWeekBuilder: (dayIndex) {
-            final labels = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"];
+            final labels = ["S", "M", "T", "W", "T", "F", "S"];
             return Padding(
               padding: const EdgeInsets.only(bottom: 4.0),
               child: Text(
@@ -95,7 +96,7 @@ class CalendarioState extends State<Calendario> {
             );
           },
           onCellTapped: (date) {
-            final eventsOnTheDate = eventos.where((event) {
+            final eventsOnTheDate = _sampleEvents.where((event) {
               final eventDate = event.eventDate;
               return eventDate.year == date.year &&
                   eventDate.month == date.month &&
@@ -129,7 +130,7 @@ class CalendarioState extends State<Calendario> {
             /// Called when the page was changed
             /// Fetch additional events by using the range between [firstDate] and [lastDate] if you want
           },
-        )]
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -139,10 +140,15 @@ class CalendarioState extends State<Calendario> {
             ),
           );
         },
-        child: const Icon(Icons.add),
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+        backgroundColor: Colors.grey[700],
       ),
-    );
+    ); 
   }
+  
 
   void atualizarListaProdutos() {
     _bd.retornaNotas().then((lista) {
