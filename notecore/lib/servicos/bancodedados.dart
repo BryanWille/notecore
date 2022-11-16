@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:notecore/modelos/anotacao.dart';
@@ -8,13 +6,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 class ServicoBD {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  late CollectionReference _anotacoesUsuario =
+  late final CollectionReference _anotacoesUsuario =
       _firestore.collection("usuarios/${_auth.currentUser!.uid}/anotacoes");
 
   void criarNota(Anotacao anotacao) async {
     var map = anotacao.paraDicionario();
     await _anotacoesUsuario.doc().set(map);
   }
+
 
   Future<List<Map<String, dynamic>>> retornaNotas() async {
     QuerySnapshot<Object?> snapshot = await _anotacoesUsuario.get();
@@ -30,5 +29,9 @@ class ServicoBD {
       });
     }
     return anotacoes;
+  } 
+
+  Stream<QuerySnapshot> get anotacoes {
+    return _anotacoesUsuario.snapshots();
   }
 }

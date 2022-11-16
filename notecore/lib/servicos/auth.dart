@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:notecore/modelos/anotacao.dart';
 import 'package:notecore/modelos/usuario.dart';
 import 'package:notecore/servicos/bancodedados.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -51,7 +52,14 @@ class AuthServico {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
+
+      ServicoBD bd = ServicoBD();
+      Anotacao primeiraAnotacao = Anotacao(
+          "Primeira anotação",
+          "Essa é a minha primeira anotação usando o Notecore",
+          Timestamp.now());
       User usuario = result.user!;
+      bd.criarNota(primeiraAnotacao);
       return _usuarioDoFirebaseUser(usuario);
     } catch (e) {
       print(e.toString());

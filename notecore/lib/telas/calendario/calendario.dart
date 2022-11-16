@@ -1,12 +1,12 @@
-import 'dart:io';
 import 'package:cell_calendar/cell_calendar.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:notecore/servicos/auth.dart';
 import 'package:notecore/servicos/bancodedados.dart';
-import 'package:notecore/telas/calendario/calendario.dart';
 import 'package:flutter/material.dart';
 import 'package:notecore/telas/anotacoes/adicionaNotas.dart';
+import 'package:notecore/telas/calendario/anotacoes_calendario.dart';
 import '../Sidebar/drawer.dart';
+import 'package:provider/provider.dart';
 
 class Calendario extends StatelessWidget {
   Calendario({Key? key}) : super(key: key);
@@ -17,6 +17,11 @@ class Calendario extends StatelessWidget {
   Widget build(BuildContext context) {
     final _sampleEvents = sampleEvents();
     final cellCalendarPageController = CellCalendarPageController();
+    /*return StreamProvider<QuerySnapshot?>.value(
+      value: ServicoBD().anotacoes,
+      initialData: null,
+      child:
+      */
     return Scaffold(
       appBar: AppBar(
         title: Text("Suas anotações"),
@@ -25,8 +30,7 @@ class Calendario extends StatelessWidget {
             icon: Icon(Icons.person),
             label: Text("Deslogar"),
             onPressed: () {
-              _bd.retornaNotas();
-              //await _auth.deslogar();
+              print("botão de debu");
             },
           )
         ],
@@ -34,6 +38,7 @@ class Calendario extends StatelessWidget {
       drawer: SafeArea(
         child: MenuDrawer(),
       ),
+      //body: AnotacoesLista(),
       body: Container(
         child: CellCalendar(
           cellCalendarPageController: cellCalendarPageController,
@@ -142,12 +147,6 @@ class Calendario extends StatelessWidget {
       fontSize: 9,
       color: Colors.white,
     );
-
-    var notas = _bd.retornaNotas();
-    List<Map<String, dynamic>> payload = new List.empty(growable: true);
-    notas.then((value) => payload = value);
-    print(payload);
-
     final sampleEvents = [
       CalendarEvent(
         eventName: "payload[0]['titulo']",
