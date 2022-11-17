@@ -53,12 +53,11 @@ class _AdicionaNotaState extends State<AdicionaNota> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      if (titulo == "" && descricao == "") {
+                      if (titulo == "" || descricao == "") {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(
-                              "Não é possível enviar uma anotação sem descrição e titulo"),
+                              "Não é possível enviar uma anotação sem descrição e/ou titulo"),
                           backgroundColor: Colors.red,
-                          
                         ));
                       } else {
                         add();
@@ -94,9 +93,10 @@ class _AdicionaNotaState extends State<AdicionaNota> {
                     icon: const Icon(Icons.arrow_downward),
                     elevation: 16,
                     onChanged: (IconTheme? value) {
-                      print(value!.data.color.hashCode);
+                      String hex = value!.data.color!.value.toRadixString(16);
+                      print(hex);
                       setState(() {
-                        dropdownValue = value!;
+                        dropdownValue = value;
                       });
                     },
                     items: list
