@@ -51,6 +51,12 @@ class ServicoBD {
     _anotacoesUsuario.doc(nota.idNota).set(anotacao);
   }
 
+  //Deletar nota
+  void deletarNota(Anotacao nota) {
+    var anotacao = nota.paraDicionario();
+    _anotacoesUsuario.doc(nota.idNota).delete();
+  }
+
   Stream<QuerySnapshot> get anotacoes {
     return _anotacoesUsuario.snapshots();
   }

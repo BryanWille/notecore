@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../calendario/calendario.dart';
 import '../sobre/sobre.dart';
 import '../anotacoes/adicionar_notas.dart';
+import '../../main.dart';
 
 class MenuDrawer extends StatelessWidget {
   MenuDrawer({Key? key}) : super(key: key);
@@ -67,8 +68,12 @@ class MenuDrawer extends StatelessWidget {
               trailing: const Icon(Icons.arrow_forward),
               onTap: () {
                 AuthServico _auth = AuthServico();
-                Navigator.pop(context);
                 _auth.deslogar();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => MyApp(),
+                    ));
               }),
         ],
       ),

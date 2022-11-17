@@ -167,10 +167,13 @@ class EditarAnotacaoState extends State<EditarAnotacao> {
   }
 
   void deletarNota() {
-    print("entrei aqui");
+    Anotacao deletarNota = Anotacao.deDicionario(anotacao);
+    _bd.deletarNota(deletarNota);
   }
 
   void _showDialog() {
+    const snackBar = SnackBar(
+  content: Text('Anotação deletada com sucesso'),);
     // flutter defined function
     showDialog(
       context: context,
@@ -182,9 +185,15 @@ class EditarAnotacaoState extends State<EditarAnotacao> {
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             new ElevatedButton(
-              child: new Text(""),
+              child: new Text("Sim"),
               onPressed: () {
                 deletarNota();
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (contex) => Calendario(),
+                  ),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
               },
             ),
             new ElevatedButton(
