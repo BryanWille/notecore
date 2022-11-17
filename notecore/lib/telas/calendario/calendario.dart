@@ -1,4 +1,5 @@
 import 'package:cell_calendar/cell_calendar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:notecore/servicos/auth.dart';
 import 'package:notecore/servicos/bancodedados.dart';
 import 'package:flutter/material.dart';
@@ -37,10 +38,13 @@ class CalendarioState extends State<Calendario> {
         ListView?.builder(
             itemCount: _listaNotas.length,
             itemBuilder: (context, index) {
+              DateTime diaAnotacao =
+                  (_listaNotas[index]['horaCriacao'] as Timestamp).toDate();
               Color cor = Color(converterCor(_listaNotas[index]['hexCor']));
               final evento = CalendarEvent(
                 eventName: _listaNotas[index]['titulo'],
-                eventDate: DateTime.now().add(Duration(days: 0)),
+                eventDate: diaAnotacao.add(
+                    Duration(days: diasEntre(DateTime.now(), diaAnotacao))),
                 eventBackgroundColor: cor,
                 eventID: _listaNotas[index]['idNota'],
               );
@@ -112,7 +116,9 @@ class CalendarioState extends State<Calendario> {
                             .map(
                               (event) => ElevatedButton(
                                 style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all<Color>(event.eventBackgroundColor)),
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            event.eventBackgroundColor)),
                                 child: Container(
                                   width: double.infinity,
                                   padding: EdgeInsets.all(4),
@@ -170,5 +176,11 @@ class CalendarioState extends State<Calendario> {
       hexColor = "FF" + hexColor;
     }
     return int.parse(hexColor, radix: 16);
+  }
+
+  int diasEntre(DateTime de, DateTime para) {
+    de = DateTime(de.year, de.month, de.day);
+    para = DateTime(para.year, para.month, para.day);
+    return (para.difference(de).inHours / 24).round();
   }
 }

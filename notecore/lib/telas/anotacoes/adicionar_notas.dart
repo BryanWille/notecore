@@ -59,7 +59,6 @@ class _AdicionaNotaState extends State<AdicionaNota> {
                           content: Text(
                               "Não é possível enviar uma anotação sem descrição e titulo"),
                           backgroundColor: Colors.red,
-                          
                         ));
                       } else {
                         add();
@@ -97,7 +96,7 @@ class _AdicionaNotaState extends State<AdicionaNota> {
                     onChanged: (IconTheme? value) {
                       print(value!.data.color.hashCode);
                       setState(() {
-                        dropdownValue = value!;
+                        dropdownValue = value;
                       });
                     },
                     items: list
@@ -173,7 +172,8 @@ class _AdicionaNotaState extends State<AdicionaNota> {
   void add() async {
     // Salvar no bd
     horaCriacao = Timestamp.now();
-    Anotacao nota = Anotacao(titulo, descricao, horaCriacao, hexCor, idNota: DateTime.now().microsecondsSinceEpoch.toString());
+    Anotacao nota = Anotacao(titulo, descricao, horaCriacao, hexCor,
+        idNota: DateTime.now().microsecondsSinceEpoch.toString());
     _bd.criarNota(nota);
   }
 }
