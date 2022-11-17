@@ -37,10 +37,11 @@ class CalendarioState extends State<Calendario> {
         ListView?.builder(
             itemCount: _listaNotas.length,
             itemBuilder: (context, index) {
+              Color cor = Color(converterCor(_listaNotas[index]['hexCor']));
               final evento = CalendarEvent(
                 eventName: _listaNotas[index]['titulo'],
-                eventDate: DateTime.now().add(Duration(days: 1)),
-                eventBackgroundColor: Colors.greenAccent,
+                eventDate: DateTime.now().add(Duration(days: 0)),
+                eventBackgroundColor: cor,
                 eventID: _listaNotas[index]['idNota'],
               );
               eventos.add(evento);
@@ -110,6 +111,8 @@ class CalendarioState extends State<Calendario> {
                         children: eventsOnTheDate
                             .map(
                               (event) => ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all<Color>(event.eventBackgroundColor)),
                                 child: Container(
                                   width: double.infinity,
                                   padding: EdgeInsets.all(4),
@@ -159,5 +162,13 @@ class CalendarioState extends State<Calendario> {
         _listaNotas = lista;
       });
     });
+  }
+
+  int converterCor(String hexColor) {
+    hexColor = hexColor.toUpperCase().replaceAll("#", "");
+    if (hexColor.length == 6) {
+      hexColor = "FF" + hexColor;
+    }
+    return int.parse(hexColor, radix: 16);
   }
 }

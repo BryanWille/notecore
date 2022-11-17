@@ -56,8 +56,9 @@ class AuthServico {
       ServicoBD bd = ServicoBD();
       Anotacao primeiraAnotacao = Anotacao(
           "Primeira anotação",
+          idNota: DateTime.now().microsecondsSinceEpoch.toString(),
           "Essa é a minha primeira anotação usando o Notecore",
-          Timestamp.now());
+          Timestamp.now(), "ae8b6b");
       User usuario = result.user!;
       bd.criarNota(primeiraAnotacao);
       return _usuarioDoFirebaseUser(usuario);

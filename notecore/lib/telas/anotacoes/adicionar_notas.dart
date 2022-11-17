@@ -29,6 +29,7 @@ class _AdicionaNotaState extends State<AdicionaNota> {
   ];
   String titulo = "";
   String descricao = "";
+  String hexCor = "";
   late Timestamp horaCriacao;
   final ServicoBD _bd = ServicoBD();
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -56,8 +57,9 @@ class _AdicionaNotaState extends State<AdicionaNota> {
                       if (titulo == "" || descricao == "") {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(
-                              "Não é possível enviar uma anotação sem descrição e/ou titulo"),
+                              "Não é possível enviar uma anotação sem descrição e titulo"),
                           backgroundColor: Colors.red,
+                          
                         ));
                       } else {
                         add();
@@ -93,10 +95,9 @@ class _AdicionaNotaState extends State<AdicionaNota> {
                     icon: const Icon(Icons.arrow_downward),
                     elevation: 16,
                     onChanged: (IconTheme? value) {
-                      String hex = value!.data.color!.value.toRadixString(16);
-                      print(hex);
+                      print(value!.data.color.hashCode);
                       setState(() {
-                        dropdownValue = value;
+                        dropdownValue = value!;
                       });
                     },
                     items: list
@@ -172,7 +173,7 @@ class _AdicionaNotaState extends State<AdicionaNota> {
   void add() async {
     // Salvar no bd
     horaCriacao = Timestamp.now();
-    Anotacao nota = Anotacao(titulo, descricao, horaCriacao);
+    Anotacao nota = Anotacao(titulo, descricao, horaCriacao, hexCor, idNota: DateTime.now().microsecondsSinceEpoch.toString());
     _bd.criarNota(nota);
   }
 }
