@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:notecore/modelos/anotacao.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:uuid/uuid.dart';
 
 class ServicoBD {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

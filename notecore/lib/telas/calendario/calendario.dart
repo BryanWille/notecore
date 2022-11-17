@@ -1,13 +1,10 @@
 import 'package:cell_calendar/cell_calendar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:notecore/servicos/auth.dart';
 import 'package:notecore/servicos/bancodedados.dart';
 import 'package:flutter/material.dart';
 import 'package:notecore/telas/anotacoes/adicionar_notas.dart';
 import 'package:notecore/telas/anotacoes/visualizar_nota.dart';
-import 'package:notecore/telas/calendario/anotacoes_calendario.dart';
 import '../sidebar/drawer.dart';
-import 'package:provider/provider.dart';
 
 class Calendario extends StatefulWidget {
   const Calendario({Key? key}) : super(key: key);

@@ -1,14 +1,9 @@
-import 'package:cell_calendar/cell_calendar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:notecore/modelos/anotacao.dart';
 import 'package:notecore/servicos/auth.dart';
 import 'package:notecore/servicos/bancodedados.dart';
 import 'package:flutter/material.dart';
-import 'package:notecore/telas/anotacoes/adicionar_notas.dart';
-import 'package:notecore/telas/calendario/anotacoes_calendario.dart';
 import 'package:notecore/telas/calendario/calendario.dart';
 import '../sidebar/drawer.dart';
-import 'package:provider/provider.dart';
 
 class EditarAnotacao extends StatefulWidget {
   EditarAnotacao({Key? key, required this.idNota}) : super(key: key);
@@ -173,7 +168,8 @@ class EditarAnotacaoState extends State<EditarAnotacao> {
 
   void _showDialog() {
     const snackBar = SnackBar(
-  content: Text('Anotação deletada com sucesso'),);
+      content: Text('Anotação deletada com sucesso'),
+    );
     // flutter defined function
     showDialog(
       context: context,

@@ -8,6 +8,7 @@ import '../../main.dart';
 
 class MenuDrawer extends StatelessWidget {
   MenuDrawer({Key? key}) : super(key: key);
+  AuthServico _auth = AuthServico();
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +16,8 @@ class MenuDrawer extends StatelessWidget {
       child: ListView(
         children: [
           const UserAccountsDrawerHeader(
-            accountName: Text(''),
-            accountEmail: Text('seuemail@mail.com'),
+            accountName: Text('Seu Nome'),
+            accountEmail: Text("seuemail@example.com"),
             currentAccountPicture: CircleAvatar(
               backgroundImage:
                   AssetImage('lib/assets/images/Notebook-pana.png'),
@@ -67,13 +68,12 @@ class MenuDrawer extends StatelessWidget {
               title: const Text("Logout"),
               trailing: const Icon(Icons.arrow_forward),
               onTap: () {
-                AuthServico _auth = AuthServico();
-                _auth.deslogar();
+                AuthServico _logout = AuthServico();
+                _logout.deslogar();
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => MyApp(),
-                    ));
+                        builder: (BuildContext context) => MyApp()));
               }),
         ],
       ),

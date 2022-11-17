@@ -13,119 +13,158 @@ class AdicionaNota extends StatefulWidget {
 }
 
 class _AdicionaNotaState extends State<AdicionaNota> {
-  late String titulo;
-  late String descricao;
+  List<IconTheme> list = [
+    new IconTheme(
+      data: new IconThemeData(color: Colors.yellow),
+      child: new Icon(Icons.circle),
+    ),
+    new IconTheme(
+      data: new IconThemeData(color: Colors.greenAccent),
+      child: new Icon(Icons.circle),
+    ),
+    new IconTheme(
+      data: new IconThemeData(color: Colors.blue),
+      child: new Icon(Icons.circle),
+    ),
+  ];
+  String titulo = "";
+  String descricao = "";
   late Timestamp horaCriacao;
   final ServicoBD _bd = ServicoBD();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Sobre'),
-          centerTitle: true,
-        ),
-        backgroundColor: Color.fromARGB(240, 235, 227, 200),
-        body: SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.only(
-                top: 12.0, right: 60.0, left: 60.0, bottom: 20.0),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
+    IconTheme dropdownValue = list.first;
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Sobre'),
+        centerTitle: true,
+      ),
+      backgroundColor: Color.fromARGB(240, 235, 227, 200),
+      body: SingleChildScrollView(
+        child: Container(
+          padding:
+              EdgeInsets.only(top: 12.0, right: 60.0, left: 60.0, bottom: 20.0),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      if (titulo == "" && descricao == "") {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(
+                              "Não é possível enviar uma anotação sem descrição e titulo"),
+                          backgroundColor: Colors.red,
+                          
+                        ));
+                      } else {
                         add();
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (contex) => Calendario(),
                           ),
                         );
-                      },
-                      child: Text(
-                        "Salvar",
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          fontFamily: "lato",
-                          color: Colors.white,
+                      }
+                    },
+                    child: Text(
+                      "Salvar",
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        fontFamily: "lato",
+                        color: Colors.white,
+                      ),
+                    ),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                        Colors.blue,
+                      ),
+                      padding: MaterialStateProperty.all(
+                        EdgeInsets.symmetric(
+                          horizontal: 25.0,
+                          vertical: 10.0,
                         ),
                       ),
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                          Colors.blue,
+                    ),
+                  ),
+                  DropdownButton<IconTheme>(
+                    value: dropdownValue,
+                    icon: const Icon(Icons.arrow_downward),
+                    elevation: 16,
+                    onChanged: (IconTheme? value) {
+                      print(value!.data.color.hashCode);
+                      setState(() {
+                        dropdownValue = value!;
+                      });
+                    },
+                    items: list
+                        .map<DropdownMenuItem<IconTheme>>((IconTheme value) {
+                      return DropdownMenuItem<IconTheme>(
+                        value: value,
+                        child: value,
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
+              //
+              SizedBox(
+                height: 12.0,
+              ),
+              //
+              Form(
+                child: Column(
+                  children: [
+                    TextFormField(
+                      decoration: InputDecoration.collapsed(
+                        hintText: "Titulo",
+                      ),
+                      style: TextStyle(
+                        fontSize: 32.0,
+                        fontFamily: "lato",
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 0, 0, 0),
+                      ),
+                      onChanged: (_val) {
+                        titulo = _val;
+                      },
+                    ),
+                    Divider(
+                      color: Colors.black,
+                      height: 20,
+                      thickness: 2,
+                      indent: 10,
+                      endIndent: 10,
+                    ),
+                    //
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.75,
+                      padding: const EdgeInsets.only(top: 12.0),
+                      child: TextFormField(
+                        decoration: InputDecoration.collapsed(
+                          hintText: "Escreva aqui...",
                         ),
-                        padding: MaterialStateProperty.all(
-                          EdgeInsets.symmetric(
-                            horizontal: 25.0,
-                            vertical: 10.0,
-                          ),
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontFamily: "lato",
                         ),
+                        maxLines: 20,
+                        onChanged: (_val) {
+                          descricao = _val;
+                        },
                       ),
                     ),
                   ],
                 ),
-                //
-                SizedBox(
-                  height: 12.0,
-                ),
-                //
-                Form(
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        decoration: InputDecoration.collapsed(
-                          hintText: "Titulo",
-                        ),
-                        style: TextStyle(
-                          fontSize: 32.0,
-                          fontFamily: "lato",
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 0, 0, 0),
-                        ),
-                        onChanged: (_val) {
-                          titulo = _val;
-                        },
-                      ),
-                      Divider(
-                        color: Colors.black,
-                        height: 20,
-                        thickness: 2,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
-                      //
-                      Container(
-                        height: MediaQuery.of(context).size.height * 0.75,
-                        padding: const EdgeInsets.only(top: 12.0),
-                        child: TextFormField(
-                          decoration: InputDecoration.collapsed(
-                            hintText: "Escreva aqui...",
-                            
-                          ),
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            fontFamily: "lato",
-                          ),
-                          maxLines: 20,
-                          onChanged: (_val) {
-                            descricao = _val;
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
-        drawer: SafeArea(
-          child: MenuDrawer(),
-        ),
+      ),
+      drawer: SafeArea(
+        child: MenuDrawer(),
       ),
     );
   }
