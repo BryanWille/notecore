@@ -10,8 +10,7 @@ class ServicoBD {
 
   //Criar
   void criarNota(Anotacao anotacao) async {
-    String gerarId = DateTime.now().microsecondsSinceEpoch.toString();
-    anotacao.idNota = gerarId;
+    String gerarId = anotacao.idNota!;
     var map = anotacao.paraDicionario();
     await _anotacoesUsuario.doc(gerarId).set(map);
   }
