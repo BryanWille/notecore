@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../servicos/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../calendario/calendario.dart';
+import '../sobre/sobre.dart';
+import '../anotacoes/adicionar_notas.dart';
 
 class MenuDrawer extends StatelessWidget {
   MenuDrawer({Key? key}) : super(key: key);
@@ -24,7 +27,25 @@ class MenuDrawer extends StatelessWidget {
             trailing: const Icon(Icons.arrow_forward),
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushNamed(context, "/calendario");
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => Calendario(),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.post_add),
+            title: const Text("Criar nota"),
+            trailing: const Icon(Icons.arrow_forward),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => AdicionaNota(),
+                  ));
             },
           ),
           ListTile(
@@ -33,6 +54,11 @@ class MenuDrawer extends StatelessWidget {
             trailing: const Icon(Icons.arrow_forward),
             onTap: () {
               Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => Sobre(),
+                  ));
             },
           ),
           ListTile(

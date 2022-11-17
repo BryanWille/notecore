@@ -3,7 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:notecore/servicos/auth.dart';
 import 'package:notecore/servicos/bancodedados.dart';
 import 'package:flutter/material.dart';
-import 'package:notecore/telas/anotacoes/adicionaNotas.dart';
+import 'package:notecore/telas/anotacoes/adicionar_notas.dart';
+import 'package:notecore/telas/anotacoes/visualizar_nota.dart';
 import 'package:notecore/telas/calendario/anotacoes_calendario.dart';
 import '../sidebar/drawer.dart';
 import 'package:provider/provider.dart';
@@ -18,38 +19,39 @@ class Calendario extends StatefulWidget {
 class CalendarioState extends State<Calendario> {
   AuthServico _auth = AuthServico();
   ServicoBD _bd = ServicoBD();
-  List<Map<String, dynamic>>_listaProdutos = [];
+  List<Map<String, dynamic>> _listaNotas = [];
   List<CalendarEvent> eventos = [];
-
 
   @override
   void initState() {
     super.initState();
-    atualizarListaProdutos();
+    atualizarListaNotas();
   }
 
   @override
   Widget build(BuildContext context) {
     final cellCalendarPageController = CellCalendarPageController();
     return Scaffold(
+      drawer: SafeArea(
+        child: MenuDrawer(),
+      ),
       appBar: AppBar(title: const Text('Notecore: Suas anotações')),
-      body: Stack(
-      children: <Widget>[
+      body: Stack(children: <Widget>[
         ListView?.builder(
-        itemCount: _listaProdutos.length,
-        itemBuilder: (context, index) {
-          final evento = CalendarEvent(
-                eventName: _listaProdutos[index]['titulo'],
-                eventDate:  DateTime.now().add(Duration(days: 2)),
-                eventBackgroundColor: Colors.indigoAccent,
-          );
-          eventos.add(evento);
-          return  Container();}),
+            itemCount: _listaNotas.length,
+            itemBuilder: (context, index) {
+              final evento = CalendarEvent(
+                eventName: _listaNotas[index]['titulo'],
+                eventDate: DateTime.now().add(Duration(days: 1)),
+                eventBackgroundColor: Colors.greenAccent,
+                eventID: _listaNotas[index]['idNota'],
+              );
+              eventos.add(evento);
+              return Container();
+            }),
         CellCalendar(
           cellCalendarPageController: cellCalendarPageController,
-          
           events: eventos,
-
           daysOfTheWeekBuilder: (dayIndex) {
             final labels = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"];
             return Padding(
@@ -110,15 +112,25 @@ class CalendarioState extends State<Calendario> {
                         mainAxisSize: MainAxisSize.min,
                         children: eventsOnTheDate
                             .map(
-                              (event) => Container(
-                                width: double.infinity,
-                                padding: EdgeInsets.all(4),
-                                margin: EdgeInsets.only(bottom: 12),
-                                color: event.eventBackgroundColor,
-                                child: Text(
-                                  event.eventName,
-                                  style: TextStyle(color: event.eventTextColor),
+                              (event) => ElevatedButton(
+                                child: Container(
+                                  width: double.infinity,
+                                  padding: EdgeInsets.all(4),
+                                  margin: EdgeInsets.only(bottom: 12),
+                                  color: event.eventBackgroundColor,
+                                  child: Text(event.eventName,
+                                      style: TextStyle(
+                                          color: event.eventTextColor)),
                                 ),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            VisualizarAnotacao(
+                                                idNota: event.eventID!),
+                                      ));
+                                },
                               ),
                             )
                             .toList(),
@@ -129,8 +141,8 @@ class CalendarioState extends State<Calendario> {
             /// Called when the page was changed
             /// Fetch additional events by using the range between [firstDate] and [lastDate] if you want
           },
-        )]
-      ),
+        )
+      ]),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(
@@ -144,29 +156,11 @@ class CalendarioState extends State<Calendario> {
     );
   }
 
-  void atualizarListaProdutos() {
+  void atualizarListaNotas() {
     _bd.retornaNotas().then((lista) {
       setState(() {
-        _listaProdutos = lista;
+        _listaNotas = lista;
       });
     });
-  }
-
-
-
-  List<CalendarEvent> sampleEvents() {
-    final today = DateTime.now();
-    final eventTextStyle = TextStyle(
-      fontSize: 9,
-      color: Colors.white,
-    );
-    final sampleEvents = [
-      CalendarEvent(
-        eventName: "payload[0]['titulo']",
-        eventDate: today.add(Duration(days: 5)),
-        eventBackgroundColor: Colors.indigoAccent,
-      ),
-    ];
-    return sampleEvents;
   }
 }

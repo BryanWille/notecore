@@ -1,24 +1,8 @@
 import 'package:flutter/material.dart';
+import '../sidebar/drawer.dart';
 
-main() => runApp(const MyApp());
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: Colors.blue,
-      ),
-      home: const HomePage(),
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class Sobre extends StatelessWidget {
+  const Sobre({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,12 +17,15 @@ class HomePage extends StatelessWidget {
           children: [
             Text(
                 'Notecore foi desenvolvido para um trabalho acadêmico da matéria de Desenvolvimento para Dispositivos Móveis, do curso de Ciências da Computação, pela faculdade Dom Helder Câmara.'),
-            new Image.asset("lib/assets/images/sobre.png"),
+            new Image.asset("lib/assets/images/sobre.png", height: 250,),
             Text(
                 'O objetivo era desenvolver uma aplicação com os conhecimentos adquiridos durante o semestre.\n\n\n\n\n\n\n'),
             Text('Todos os direitos reservados aos criadores.'),
           ],
         ),
+      ),
+      drawer: SafeArea(
+        child: MenuDrawer(),
       ),
     );
   }

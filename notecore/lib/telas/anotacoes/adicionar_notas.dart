@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import '../sidebar/drawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -23,37 +23,20 @@ class _AdicionaNotaState extends State<AdicionaNota> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Sobre'),
+          centerTitle: true,
+        ),
+        backgroundColor: Color.fromARGB(240, 235, 227, 200),
         body: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.all(
-              12.0,
-            ),
+            padding: EdgeInsets.only(
+                top: 12.0, right: 60.0, left: 60.0, bottom: 20.0),
             child: Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Icon(
-                        Icons.arrow_back_ios_outlined,
-                        size: 24.0,
-                      ),
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                          Colors.grey[700],
-                        ),
-                        padding: MaterialStateProperty.all(
-                          EdgeInsets.symmetric(
-                            horizontal: 25.0,
-                            vertical: 8.0,
-                          ),
-                        ),
-                      ),
-                    ),
-                    //
                     ElevatedButton(
                       onPressed: () {
                         add();
@@ -64,7 +47,7 @@ class _AdicionaNotaState extends State<AdicionaNota> {
                         );
                       },
                       child: Text(
-                        "Save",
+                        "Salvar",
                         style: TextStyle(
                           fontSize: 18.0,
                           fontFamily: "lato",
@@ -73,12 +56,12 @@ class _AdicionaNotaState extends State<AdicionaNota> {
                       ),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(
-                          Colors.grey[700],
+                          Colors.blue,
                         ),
                         padding: MaterialStateProperty.all(
                           EdgeInsets.symmetric(
                             horizontal: 25.0,
-                            vertical: 8.0,
+                            vertical: 10.0,
                           ),
                         ),
                       ),
@@ -101,11 +84,18 @@ class _AdicionaNotaState extends State<AdicionaNota> {
                           fontSize: 32.0,
                           fontFamily: "lato",
                           fontWeight: FontWeight.bold,
-                          color: Colors.grey,
+                          color: Color.fromARGB(255, 0, 0, 0),
                         ),
                         onChanged: (_val) {
                           titulo = _val;
                         },
+                      ),
+                      Divider(
+                        color: Colors.black,
+                        height: 20,
+                        thickness: 2,
+                        indent: 10,
+                        endIndent: 10,
                       ),
                       //
                       Container(
@@ -113,17 +103,17 @@ class _AdicionaNotaState extends State<AdicionaNota> {
                         padding: const EdgeInsets.only(top: 12.0),
                         child: TextFormField(
                           decoration: InputDecoration.collapsed(
-                            hintText: "Note Description",
+                            hintText: "Escreva aqui...",
+                            
                           ),
                           style: TextStyle(
                             fontSize: 20.0,
                             fontFamily: "lato",
-                            color: Colors.grey,
                           ),
+                          maxLines: 20,
                           onChanged: (_val) {
                             descricao = _val;
                           },
-                          maxLines: 20,
                         ),
                       ),
                     ],
@@ -133,16 +123,17 @@ class _AdicionaNotaState extends State<AdicionaNota> {
             ),
           ),
         ),
+        drawer: SafeArea(
+          child: MenuDrawer(),
+        ),
       ),
     );
   }
 
   void add() async {
-    // save to db
+    // Salvar no bd
     horaCriacao = Timestamp.now();
     Anotacao nota = Anotacao(titulo, descricao, horaCriacao);
     _bd.criarNota(nota);
-    //AlteracoesDb db = AlteracoesDb();
-    //await db.insertAnotacao(nota);
   }
 }
