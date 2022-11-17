@@ -15,7 +15,7 @@
 - Dart
 - Flutter
 - Firebase
-- SQFlite
+- Firestore
 - Git e GitHub
 
 ># ⚙️ Como funciona?
