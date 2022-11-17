@@ -177,10 +177,4 @@ class CalendarioState extends State<Calendario> {
     }
     return int.parse(hexColor, radix: 16);
   }
-
-  int diasEntre(DateTime de, DateTime para) {
-    de = DateTime(de.year, de.month, de.day);
-    para = DateTime(para.year, para.month, para.day);
-    return (para.difference(de).inHours / 24).round();
-  }
 }
