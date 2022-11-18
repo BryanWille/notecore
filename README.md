@@ -8,8 +8,6 @@
 
 - O trabalho proposto teve o intuito de aplicar todo o conhecimento adquirido durante o semestre, criando uma aplicação mobile. 
 
-[🔗 Clique aqui para acessar a aplicação](!LINK DE HOSPEDAGEM AQUI)
-
 >## 🛠 Tecnologias
 
 - Dart
@@ -34,13 +32,13 @@ Assim que o usuário entra na aplicação é direcionado a tela de login. Nesta 
 
 ### Cadastro
 
-(!TELA DE CADASTRO AQUI)
+![preview](./img-documentacao/Cadastro.PNG)
 
 Na tela de cadastro, o usuário irá inserir os dados requisitados em cada campo e clicar no botão "Cadastrar", caso todos os campos cumpram os requisitos necessários. O formulário é enviado e os dados vão para o banco de dados.
 
 >## 📅 Calendário
 
-(!TELA DO CALENDÁRIO AQUI)
+![preview](./img-documentacao/Calendario.PNG)
 
 Após o usuário ter sido autenticado pelo Firebase, ele é redirecionado a tela de calendário. Na tela de calendário o usuário terá algumas opções, sendo elas:
 - Entrar em algum dia específico.
@@ -59,7 +57,7 @@ Caso o usuário tenha escolhido "entrar" em algum dia, ele poderá executar as a
 
 >## 📲 Sidebar
 
-(!PRINT SIDEBAR)
+![preview](./img-documentacao/SideBar.PNG)
 
 Ao clicar no (!INSERIR AQUI O QUE O USUÁRIO IRÁ CLICAR), será exibido para o usuário sua sidebar. Na sidebar teremos as opções:
 - (!INSERIR OPÇÃO AQUI).
