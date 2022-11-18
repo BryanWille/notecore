@@ -43,34 +43,48 @@ Na tela de cadastro, o usuário irá inserir os dados requisitados em cada campo
 Após o usuário ter sido autenticado pelo Firebase, ele é redirecionado a tela de calendário. Na tela de calendário o usuário terá algumas opções, sendo elas:
 - Entrar em algum dia específico.
 - Verificar as notas do dia escolhido.
-- Criar uma nota em algum dia específico.
-- Acessar a sidebar clicando no (!INSERIR AQUI O QUE O USUÁRIO IRÁ CLICAR).
+- Criar uma nota para o dia atual.
+- Acessar a sidebar clicando no canto superior esquerdo.
 
 >## 📝 Notas
 
-(!TELA DE NOTAS AQUI)
+![preview](./img-documentacao/Notas-do-dia.PNG)
 
 Caso o usuário tenha escolhido "entrar" em algum dia, ele poderá executar as ações de:
 - Criar uma nova nota clicando no botão flutuante.
 - Acessar uma nota específica clicando na mesma.
-- Acessar a sidebar clicando no (!INSERIR AQUI O QUE O USUÁRIO IRÁ CLICAR).
+- Acessar a sidebar clicando no canto superior esquerdo.
+- Editar uma nota aberta clicando no lápis de edição.
+- Alterar a cor da nota clicando na paleta.
+
+![preview](./img-documentacao/Exibir-nota.PNG)
+
+![preview](./img-documentacao/Nota-edicao.PNG)
+
+![preview](./img-documentacao/Excluir-nota.PNG)
 
 >## 📲 Sidebar
 
 ![preview](./img-documentacao/SideBar.PNG)
 
-Ao clicar no (!INSERIR AQUI O QUE O USUÁRIO IRÁ CLICAR), será exibido para o usuário sua sidebar. Na sidebar teremos as opções:
-- (!INSERIR OPÇÃO AQUI).
-- (!INSERIR OPÇÃO AQUI).
-- (!INSERIR OPÇÃO AQUI).
-- (!INSERIR OPÇÃO AQUI).
-- (!INSERIR OPÇÃO AQUI).
+Ao clicar no canto superior esquerdo, será exibido para o usuário sua sidebar. Na sidebar teremos as opções:
+- Calendário.
+- Criar nota.
+- Lista de anotações.
+- Sobre.
+- Logout.
 
->## 🚪 Botão Logout
+>## 📃 Lista de notas
 
-(!PRINT BOTÃO LOGOUT)
+![preview](./img-documentacao/Todas-as-notas.PNG)
 
-Ao clicar no botão de "Logout", localizado no canto superior direito da tela, o usuário será deslogado da aplicação.
+Ao clicar na opção de Lista de anotações, será exibido todas as notas criadas pelo usuário.
+
+>## 🚪 Sobre
+
+![preview](./img-documentacao/Sobre.PNG)
+
+Ao clicar no botão "Sobre" na sidebar o usuário será redirecionado para a página que fala um pouco sobre o projeto Notecore.
 
 >## 🖥 Desenvolvedores
 
