@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:notecore/modelos/anotacao.dart';
 import 'package:notecore/servicos/bancodedados.dart';
 import 'package:notecore/telas/calendario/calendario.dart';
+import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 
 class AdicionaNota extends StatefulWidget {
   @override
@@ -15,6 +16,10 @@ class AdicionaNota extends StatefulWidget {
 class _AdicionaNotaState extends State<AdicionaNota> {
   List<IconTheme> list = [
     new IconTheme(
+      data: new IconThemeData(color: Colors.blue),
+      child: new Icon(Icons.circle),
+    ),
+    new IconTheme(
       data: new IconThemeData(color: Colors.yellow),
       child: new Icon(Icons.circle),
     ),
@@ -22,23 +27,21 @@ class _AdicionaNotaState extends State<AdicionaNota> {
       data: new IconThemeData(color: Colors.greenAccent),
       child: new Icon(Icons.circle),
     ),
-    new IconTheme(
-      data: new IconThemeData(color: Colors.blue),
-      child: new Icon(Icons.circle),
-    ),
   ];
   String titulo = "";
   String descricao = "";
+  String hexCor = "";
+  Color corTemp = Colors.blue;
   late Timestamp horaCriacao;
   final ServicoBD _bd = ServicoBD();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  IconTheme? dropdownValue;
 
   @override
   Widget build(BuildContext context) {
-    IconTheme dropdownValue = list.first;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sobre'),
+        title: const Text('Nova nota'),
         centerTitle: true,
       ),
       backgroundColor: Color.fromARGB(240, 235, 227, 200),
@@ -78,7 +81,7 @@ class _AdicionaNotaState extends State<AdicionaNota> {
                     ),
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
-                        Colors.blue,
+                        Colors.amber,
                       ),
                       padding: MaterialStateProperty.all(
                         EdgeInsets.symmetric(
@@ -88,32 +91,8 @@ class _AdicionaNotaState extends State<AdicionaNota> {
                       ),
                     ),
                   ),
-                  DropdownButton<IconTheme>(
-                    value: dropdownValue,
-                    icon: const Icon(Icons.arrow_downward),
-                    elevation: 16,
-                    onChanged: (IconTheme? value) {
-                      String hex = value!.data.color!.value.toRadixString(16);
-                      print(hex);
-                      setState(() {
-                        dropdownValue = value;
-                      });
-                    },
-                    items: list
-                        .map<DropdownMenuItem<IconTheme>>((IconTheme value) {
-                      return DropdownMenuItem<IconTheme>(
-                        value: value,
-                        child: value,
-                      );
-                    }).toList(),
-                  ),
                 ],
               ),
-              //
-              SizedBox(
-                height: 12.0,
-              ),
-              //
               Form(
                 child: Column(
                   children: [
@@ -166,13 +145,62 @@ class _AdicionaNotaState extends State<AdicionaNota> {
       drawer: SafeArea(
         child: MenuDrawer(),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _showDialog();
+        },
+        backgroundColor: Color(0xFFF17532),
+        child: Icon(Icons.color_lens),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
   void add() async {
     // Salvar no bd
     horaCriacao = Timestamp.now();
-    Anotacao nota = Anotacao(titulo, descricao, horaCriacao);
+    if (hexCor == null || hexCor == "") {
+      hexCor = "2196f3";
+    }
+
+    Anotacao nota = Anotacao(titulo, descricao, horaCriacao, hexCor,
+        idNota: DateTime.now().microsecondsSinceEpoch.toString());
     _bd.criarNota(nota);
+  }
+
+  void _showDialog() {
+    const snackBar = SnackBar(
+      content: Text('Anotação deletada com sucesso'),
+    );
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("Alterar cor da nota"),
+          content: SelectionArea(
+              child: MaterialColorPicker(
+                  onColorChange: (Color color) {
+                    corTemp = color;
+                  },
+                  selectedColor: Colors.blue)),
+          actions: <Widget>[
+            new ElevatedButton(
+              child: new Text("Salvar"),
+              onPressed: () {
+                Navigator.of(context).pop();
+                hexCor = corTemp.value.toRadixString(16).substring(2);
+              },
+            ),
+            new ElevatedButton(
+              child: new Text("Cancelar"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

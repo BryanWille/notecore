@@ -4,9 +4,11 @@ class Anotacao {
   String? idNota;
   String? titulo;
   String? descricao;
+  String? hexCor;
   Timestamp? horaCriacao;
 
-  Anotacao(this.titulo, this.descricao, this.horaCriacao, {this.idNota});
+  Anotacao(this.titulo, this.descricao, this.horaCriacao, this.hexCor,
+      {this.idNota});
 
   Map<String, dynamic> paraDicionario() {
     var map = <String, dynamic>{
@@ -14,6 +16,7 @@ class Anotacao {
       'titulo': titulo,
       'descricao': descricao,
       'horaCriacao': horaCriacao,
+      'hexCor': hexCor,
     };
     return map;
   }
@@ -23,6 +26,7 @@ class Anotacao {
     titulo = map['titulo'];
     descricao = map['descricao'];
     horaCriacao = map['horaCriacao'];
+    hexCor = map['hexCor'];
   }
 
   factory Anotacao.fromFirestore(
@@ -35,6 +39,7 @@ class Anotacao {
       data?['titulo'],
       data?['descricao'],
       data?['horaCriacao'],
+      data?['hexCor'],
     );
   }
 
@@ -44,6 +49,7 @@ class Anotacao {
       if (titulo != null) "titulo": titulo,
       if (descricao != null) "descricao": descricao,
       if (horaCriacao != null) "horaCriacao": horaCriacao,
+      if (hexCor != null) "hexCor": hexCor,
     };
   }
 
@@ -52,10 +58,11 @@ class Anotacao {
     titulo = map['titulo'];
     descricao = map['descricao'];
     horaCriacao = map['horaCriacao'];
+    hexCor = map['hexCor'];
   }
 
   @override
   String toString() {
-    return "Anoptações => (titulo: $titulo, descricao: $descricao, data: $horaCriacao, idNota: $idNota)";
+    return "Anoptações => (titulo: $titulo, descricao: $descricao, hexCor: $hexCor, data: $horaCriacao, idNota: $idNota)";
   }
 }

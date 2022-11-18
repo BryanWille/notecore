@@ -7,16 +7,18 @@ class ServicoBD {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   late final CollectionReference _anotacoesUsuario =
       _firestore.collection("usuarios/${_auth.currentUser!.uid}/anotacoes");
+  late final CollectionReference _usuarioPessoa =
+      _firestore.collection("usuarios/${_auth.currentUser!.uid}/");
 
-  //Criar
+  //Criar Nota
   void criarNota(Anotacao anotacao) async {
-    String gerarId = DateTime.now().microsecondsSinceEpoch.toString();
-    anotacao.idNota = gerarId;
+    String gerarId = anotacao.idNota!;
     var map = anotacao.paraDicionario();
     await _anotacoesUsuario.doc(gerarId).set(map);
   }
 
-  //Ler
+
+  //Ler todas as notas
   Future<List<Map<String, dynamic>>> retornaNotas() async {
     QuerySnapshot<Object?> snapshot = await _anotacoesUsuario.get();
     final todosIds = snapshot.docs.map((doc) => doc.id).toList();
@@ -41,6 +43,16 @@ class ServicoBD {
       nota = doc.data() as Map<String, dynamic>;
     });
     return nota;
+  }
+
+  // Ler um usuário
+  Future<Map<String, dynamic>> retornaUsuario(String id) async {
+    QuerySnapshot<Object?> snapshot = await _anotacoesUsuario.get();
+    Map<String, dynamic> usuario = {};
+    await _usuarioPessoa.doc(id).get().then((DocumentSnapshot doc) {
+      usuario = doc.data() as Map<String, dynamic>;
+    });
+    return usuario;
   }
 
   //Atualizar Nota

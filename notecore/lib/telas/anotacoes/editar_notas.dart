@@ -8,7 +8,6 @@ import '../sidebar/drawer.dart';
 class EditarAnotacao extends StatefulWidget {
   EditarAnotacao({Key? key, required this.idNota}) : super(key: key);
   String idNota;
-
   @override
   State<EditarAnotacao> createState() => EditarAnotacaoState(idNota: idNota);
 }
@@ -18,6 +17,7 @@ class EditarAnotacaoState extends State<EditarAnotacao> {
   ServicoBD _bd = ServicoBD();
   List<Map<String, dynamic>> nota = [];
   String idNota;
+  bool somenteLeitura = true;
   Map<String, dynamic> anotacao = {};
 
   EditarAnotacaoState({required this.idNota});
@@ -42,7 +42,7 @@ class EditarAnotacaoState extends State<EditarAnotacao> {
       drawer: SafeArea(
         child: MenuDrawer(),
       ),
-      appBar: AppBar(title: Text("Olá mundo")),
+      appBar: AppBar(title: Text("A sua anotação")),
       body: Stack(children: <Widget>[
         ListView?.builder(
             itemCount: nota.length,
@@ -56,37 +56,7 @@ class EditarAnotacaoState extends State<EditarAnotacao> {
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              atualizarNota();
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (contex) => Calendario(),
-                                ),
-                              );
-                            },
-                            child: Text(
-                              "Salvar edição",
-                              style: TextStyle(
-                                fontSize: 18.0,
-                                fontFamily: "lato",
-                                color: Colors.black,
-                              ),
-                            ),
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                Colors.amber,
-                              ),
-                              padding: MaterialStateProperty.all(
-                                EdgeInsets.symmetric(
-                                  horizontal: 25.0,
-                                  vertical: 10.0,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                        children: [mostrarBotao()],
                       ),
                       //
                       SizedBox(
@@ -97,15 +67,19 @@ class EditarAnotacaoState extends State<EditarAnotacao> {
                         child: Column(
                           children: [
                             TextFormField(
+                              textAlign: TextAlign.center,
+                              readOnly: somenteLeitura,
                               decoration: InputDecoration.collapsed(
-                                hintText: "Titulo",
+                                hintText: "Titulo"                               
                               ),
+                              
                               initialValue: anotacao['titulo'],
                               style: TextStyle(
                                 fontSize: 32.0,
                                 fontFamily: "lato",
                                 fontWeight: FontWeight.bold,
                                 color: Color.fromARGB(255, 0, 0, 0),
+                                                
                               ),
                               onChanged: (_val) {
                                 anotacao['titulo'] = _val;
@@ -123,6 +97,8 @@ class EditarAnotacaoState extends State<EditarAnotacao> {
                               height: MediaQuery.of(context).size.height * 0.75,
                               padding: const EdgeInsets.only(top: 12.0),
                               child: TextFormField(
+                                textAlign: TextAlign.center,
+                                readOnly: somenteLeitura,
                                 decoration: InputDecoration.collapsed(
                                   hintText: "Escreva aqui...",
                                 ),
@@ -146,16 +122,27 @@ class EditarAnotacaoState extends State<EditarAnotacao> {
               );
             }),
       ]),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.red,
-        onPressed: () {
-          _showDialog();
-        },
-        child: const Icon(Icons.delete),
-      ),
+      floatingActionButton: somenteLeitura
+          ? FloatingActionButton(
+              backgroundColor: Colors.amber,
+              onPressed: () {
+                habilitarEdicao();
+              },
+              child: const Icon(Icons.mode_edit),
+            )
+          : FloatingActionButton(
+              backgroundColor: Colors.red,
+              onPressed: () {
+                _showDialog();
+              },
+              child: const Icon(Icons.delete),
+            ),
     );
   }
 
+  void _editarNota() {
+    //if (){}
+  }
   void atualizarNota() {
     Anotacao editarNota = Anotacao.deDicionario(anotacao);
     _bd.atualizarNota(editarNota);
@@ -164,6 +151,50 @@ class EditarAnotacaoState extends State<EditarAnotacao> {
   void deletarNota() {
     Anotacao deletarNota = Anotacao.deDicionario(anotacao);
     _bd.deletarNota(deletarNota);
+  }
+
+  void habilitarEdicao() {
+    setState(() {
+      somenteLeitura = false;
+    });
+  }
+
+  Widget mostrarBotao() {
+    Widget retorno;
+    if (!somenteLeitura) {
+      retorno = ElevatedButton(
+        onPressed: () {
+          atualizarNota();
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (contex) => Calendario(),
+            ),
+          );
+        },
+        child: Text(
+          "Salvar edição",
+          style: TextStyle(
+            fontSize: 18.0,
+            fontFamily: "lato",
+            color: Colors.black,
+          ),
+        ),
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(
+            Colors.amber,
+          ),
+          padding: MaterialStateProperty.all(
+            EdgeInsets.symmetric(
+              horizontal: 25.0,
+              vertical: 10.0,
+            ),
+          ),
+        ),
+      );
+    } else {
+      retorno = Container();
+    }
+    return retorno;
   }
 
   void _showDialog() {

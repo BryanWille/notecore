@@ -1,9 +1,10 @@
 import 'package:cell_calendar/cell_calendar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:notecore/servicos/auth.dart';
 import 'package:notecore/servicos/bancodedados.dart';
 import 'package:flutter/material.dart';
 import 'package:notecore/telas/anotacoes/adicionar_notas.dart';
-import 'package:notecore/telas/anotacoes/visualizar_nota.dart';
+import 'package:notecore/telas/anotacoes/editar_notas.dart';
 import '../sidebar/drawer.dart';
 
 class Calendario extends StatefulWidget {
@@ -37,10 +38,14 @@ class CalendarioState extends State<Calendario> {
         ListView?.builder(
             itemCount: _listaNotas.length,
             itemBuilder: (context, index) {
+              DateTime diaAnotacao =
+                  (_listaNotas[index]['horaCriacao'] as Timestamp).toDate();
+              Color cor = Color(converterCor(_listaNotas[index]['hexCor']));
               final evento = CalendarEvent(
                 eventName: _listaNotas[index]['titulo'],
-                eventDate: DateTime.now().add(Duration(days: 1)),
-                eventBackgroundColor: Colors.greenAccent,
+                eventDate: diaAnotacao.add(
+                    Duration(days: daysBetween(diaAnotacao, DateTime.now()))),
+                eventBackgroundColor: cor,
                 eventID: _listaNotas[index]['idNota'],
               );
               eventos.add(evento);
@@ -110,21 +115,23 @@ class CalendarioState extends State<Calendario> {
                         children: eventsOnTheDate
                             .map(
                               (event) => ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            event.eventBackgroundColor)),
                                 child: Container(
                                   width: double.infinity,
-                                  padding: EdgeInsets.all(4),
-                                  margin: EdgeInsets.only(bottom: 12),
+                                  padding: EdgeInsets.all(30),
                                   color: event.eventBackgroundColor,
                                   child: Text(event.eventName,
-                                      style: TextStyle(
-                                          color: event.eventTextColor)),
+                                      style: TextStyle(color: Colors.black)),
                                 ),
                                 onPressed: () {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (BuildContext context) =>
-                                            VisualizarAnotacao(
+                                            EditarAnotacao(
                                                 idNota: event.eventID!),
                                       ));
                                 },
@@ -159,5 +166,19 @@ class CalendarioState extends State<Calendario> {
         _listaNotas = lista;
       });
     });
+  }
+
+  int converterCor(String hexColor) {
+    hexColor = hexColor.toUpperCase().replaceAll("#", "");
+    if (hexColor.length == 6) {
+      hexColor = "FF" + hexColor;
+    }
+    return int.parse(hexColor, radix: 16);
+  }
+
+  int daysBetween(DateTime from, DateTime to) {
+    from = DateTime(from.year, from.month, from.day);
+    to = DateTime(to.year, to.month, to.day);
+    return (to.difference(from).inHours / 24).round();
   }
 }

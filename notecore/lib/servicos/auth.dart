@@ -23,10 +23,6 @@ class AuthServico {
     try {
       UserCredential result = await _auth.signInAnonymously();
       User? user = result.user;
-      await _db
-          .doc("caminho")
-          .collection("teste")
-          .add({"teste": DateTime.now()});
       return _usuarioDoFirebaseUser(user);
     } catch (e) {
       print(e.toString());
@@ -48,16 +44,19 @@ class AuthServico {
   }
 
   // registro com email e senha
-  Future registroComEmaileSenha(String email, String password) async {
+  Future registroComEmaileSenha(
+      String email, String password, String nome) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
 
+      result.user!.updateDisplayName(nome);
       ServicoBD bd = ServicoBD();
       Anotacao primeiraAnotacao = Anotacao(
           "Primeira anotação",
           "Essa é a minha primeira anotação usando o Notecore",
-          Timestamp.now());
+          Timestamp.now(),
+          "2196f3");
       User usuario = result.user!;
       bd.criarNota(primeiraAnotacao);
       return _usuarioDoFirebaseUser(usuario);

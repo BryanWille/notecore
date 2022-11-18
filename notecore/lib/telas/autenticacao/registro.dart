@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:notecore/compartilhada/carregamento.dart';
 import 'package:notecore/servicos/auth.dart';
 import './login.dart';
@@ -18,6 +17,7 @@ class _RegistrarState extends State<Registrar> {
   final AuthServico _auth = AuthServico();
   final _formKey = GlobalKey<FormState>();
 
+  String nome = '';
   String email = '';
   String password = '';
   String erro = '';
@@ -69,7 +69,9 @@ class _RegistrarState extends State<Registrar> {
                         validator: (val) =>
                             val!.isEmpty ? "Insira o seu nome" : null,
                         onChanged: ((val) {
-                          setState(() {});
+                          setState(() {
+                            nome = val;
+                          });
                         }),
                       ),
                       SizedBox(height: 12),
@@ -156,7 +158,7 @@ class _RegistrarState extends State<Registrar> {
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
                                 dynamic result = await _auth
-                                    .registroComEmaileSenha(email, password);
+                                    .registroComEmaileSenha(email, password, nome);
                                 setState(() {
                                   carregando = true;
                                 });
