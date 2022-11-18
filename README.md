@@ -24,7 +24,7 @@
 
 ### Login
 
-(!TELA DE LOGIN AQUI)
+![preview](./img-documentacao/Login.PNG)
 
 Assim que o usuário entra na aplicação é direcionado a tela de login. Nesta tela o usuário terá duas opções: 
 - Inserir seu e-mail e senha em seus respectivos campos e clicar no botão "Entrar" caso seja cadastrado.
