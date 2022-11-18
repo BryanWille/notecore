@@ -1,6 +1,6 @@
 # Notecore
 
-(!LOGO AQUI)
+![preview](./img-documentacao/Logo.jpg)
 
 >## 📱 O Notecore é um aplicativo de notas, que tem o objetivo de registrar momentos ou armazenar lembretes!
 
